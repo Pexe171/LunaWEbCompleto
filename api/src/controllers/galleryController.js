@@ -3,10 +3,13 @@ const { logger } = require('../config/logger');
 
 const getGalleryController = async (req, res, next) => {
     try {
-        const { tags, search, page, limit } = req.query;
+        const { tags, search, page, limit, technique, artist, date } = req.query;
         const filters = {
             tags: tags ? tags.split(',') : undefined,
             search,
+            technique,
+            artist,
+            date,
             page: parseInt(page, 10),
             limit: parseInt(limit, 10)
         };

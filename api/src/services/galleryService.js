@@ -8,7 +8,7 @@ const createGalleryImage = async (imageData) => {
 };
 
 const getGalleryImages = async (filters) => {
-    const { tags, search, page = 1, limit = 10 } = filters;
+    const { tags, search, technique, artist, date, page = 1, limit = 10 } = filters;
     const query = {};
 
     if (tags && tags.length > 0) {
@@ -16,6 +16,19 @@ const getGalleryImages = async (filters) => {
     }
     if (search) {
         query.title = { $regex: search, $options: 'i' };
+    }
+    if (technique) {
+        query.technique = technique;
+    }
+    if (artist) {
+        query.artist = artist;
+    }
+    if (date) {
+        const start = new Date(date);
+        start.setHours(0, 0, 0, 0);
+        const end = new Date(date);
+        end.setHours(23, 59, 59, 999);
+        query.createdAt = { $gte: start, $lte: end };
     }
 
     const totalCount = await Image.countDocuments(query);
