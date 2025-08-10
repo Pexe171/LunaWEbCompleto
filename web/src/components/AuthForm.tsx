@@ -20,9 +20,6 @@ import { loginSchema, registerSchema } from "@/lib/validators";
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "./ui/use-toast";
-import { GoogleLogin } from "@react-oauth/google";
-import FacebookLogin from "@greatsumini/react-facebook-login";
-import { useAuth } from "@/hooks/useAuth";
 
 type AuthFormType = "login" | "register";
 
@@ -39,8 +36,6 @@ interface AuthFormProps {
 const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
   const router = useRouter();
   const { toast } = useToast();
-  const { loginWithGoogle, loginWithFacebook } = useAuth();
-
   const formSchema = type === "login" ? loginSchema : registerSchema;
 
   const form = useForm<FormValues>({
@@ -80,28 +75,6 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
 
   function handleSubmit(data: FormValues) {
     mutation.mutate(data);
-  }
-
-  async function handleGoogleSuccess(credentialResponse: any) {
-    if (!credentialResponse?.credential) return;
-    try {
-      await loginWithGoogle(credentialResponse.credential);
-      toast({ title: "Sucesso!", description: "Você foi autenticado com sucesso." });
-      router.push("/");
-    } catch {
-      /* erro tratado no contexto */
-    }
-  }
-
-  async function handleFacebookSuccess(response: any) {
-    if (!response?.accessToken) return;
-    try {
-      await loginWithFacebook(response.accessToken);
-      toast({ title: "Sucesso!", description: "Você foi autenticado com sucesso." });
-      router.push("/");
-    } catch {
-      /* erro tratado no contexto */
-    }
   }
 
   return (
@@ -148,32 +121,6 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
             </Button>
           </form>
         </Form>
-
-        {type === "login" && (
-          <div className="mt-4 flex flex-col space-y-2">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() =>
-                toast({
-                  title: "Erro na autenticação",
-                  description: "Falha ao entrar com Google.",
-                  variant: "destructive",
-                })
-              }
-            />
-            <FacebookLogin
-              appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || ""}
-              onSuccess={handleFacebookSuccess}
-              onFail={() =>
-                toast({
-                  title: "Erro na autenticação",
-                  description: "Falha ao entrar com Facebook.",
-                  variant: "destructive",
-                })
-              }
-            />
-          </div>
-        )}
 
         {type === "login" ? (
           <p className="mt-4 text-center text-sm text-gray-500">
