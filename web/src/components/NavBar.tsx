@@ -33,9 +33,14 @@ export default function NavBar() {
         {isAuthenticated ? (
           <Button onClick={handleLogout}>Sair</Button>
         ) : (
-          <Link href="/login">
-            <Button>Entrar</Button>
-          </Link>
+          <>
+            <Link href="/login">
+              <Button>Entrar</Button>
+            </Link>
+            <Link href="/admin/login">
+              <Button variant="ghost">Admin</Button>
+            </Link>
+          </>
         )}
       </div>
     </nav>

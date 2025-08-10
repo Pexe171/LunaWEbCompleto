@@ -3,6 +3,14 @@
 
 Este é um monorepo que contém uma API Node.js/Express e um aplicativo web Next.js para uma galeria de imagens. A API gerencia a autenticação de usuários, enquanto o aplicativo web consome essa API para exibir imagens, permitir likes e gerenciar o upload de novas imagens.
 
+## Acesso de Administrador
+
+Por padrão, um usuário administrador é criado automaticamente quando a API inicia.
+Use as credenciais abaixo para acessar a área de upload:
+
+- **Email:** `admin@galeriapexe.com`
+- **Senha:** `Adm1n#2024`
+
 ## Estrutura do Projeto
 
 - `api/`: Backend em Node.js com Express, MongoDB, e JWT para autenticação.
