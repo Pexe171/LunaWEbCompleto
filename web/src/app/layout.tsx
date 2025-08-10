@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import NavBar from "@/components/NavBar";
+import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/components/Providers";
 import Footer from "@/components/Footer";
@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="pt-br">
       <body className={inter.className}>
         <Providers>
-          <NavBar />
+          <Header />
           <main className="container mx-auto p-4 md:p-8">
             {children}
           </main>
