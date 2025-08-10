@@ -27,7 +27,9 @@ Certifique-se de ter o Docker e o Docker Compose instalados.
     * Copie os arquivos `.env.example` para `.env` e `.env.local` respectivamente.
     * `cp ./api/.env.example ./api/.env`
     * `cp ./web/.env.local.example ./web/.env.local`
-    * Você não precisa alterar nada para rodar localmente, mas pode personalizar os segredos JWT.
+    * No arquivo `web/.env.local`, defina a URL da API:
+      `NEXT_PUBLIC_API_URL=http://localhost:3333/api/v1`
+    * Você pode personalizar os segredos JWT conforme necessário.
 
 2.  **Iniciar os Serviços:**
     * Na raiz do projeto, execute o comando:
@@ -62,6 +64,7 @@ Para parar os serviços, pressione `Ctrl + C` no terminal e depois execute: `doc
 2.  **Frontend (`web/`)**
     * Navegue até a pasta `web/`.
     * Copie `.env.local.example` para `.env.local`: `cp .env.local.example .env.local`.
+    * Edite `.env.local` e configure `NEXT_PUBLIC_API_URL=http://localhost:3333/api/v1`.
     * Instale as dependências: `npm install`.
     * Inicie o servidor de desenvolvimento: `npm run dev`.
     * Acesse a galeria de imagens em: http://localhost:3000

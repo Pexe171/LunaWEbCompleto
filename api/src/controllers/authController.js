@@ -1,6 +1,5 @@
 const userService = require('../services/userService');
 const authService = require('../services/authService');
-const { validationResult } = require('express-validator');
 const { getTokens } = require('../utils/jwt');
 const { logger } = require('../config/logger');
 
