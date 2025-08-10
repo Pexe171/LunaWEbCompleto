@@ -17,6 +17,8 @@ export interface AuthContextType {
   isLoading: boolean;
   login: UseMutateAsyncFunction<any, Error, LoginData, unknown>;
   register: UseMutateAsyncFunction<any, Error, RegisterData, unknown>;
+  loginWithGoogle: UseMutateAsyncFunction<any, Error, string, unknown>;
+  loginWithFacebook: UseMutateAsyncFunction<any, Error, string, unknown>;
   logout: UseMutateAsyncFunction<void, Error, void, unknown>;
 }
 
