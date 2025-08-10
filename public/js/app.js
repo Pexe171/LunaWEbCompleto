@@ -14,11 +14,22 @@ async function load(){
 
 function render(){
   const list = document.querySelector('.masonry');
+  const placeholder = document.querySelector('.gallery-placeholder');
   list.innerHTML = '';
   const filtered = state.artworks.filter(a =>
     (state.tag==='Tudo' || a.tags.includes(state.tag.toLowerCase())) &&
     (a.title.toLowerCase().includes(state.q) || a.artist.toLowerCase().includes(state.q) || a.tags.join(' ').includes(state.q))
   );
+
+  if(filtered.length === 0){
+    placeholder.hidden = false;
+    list.style.display = 'none';
+    return;
+  }
+
+  placeholder.hidden = true;
+  list.style.display = '';
+
   const frag = document.createDocumentFragment();
   filtered.forEach((a,i)=>{
     const card = document.createElement('article');
