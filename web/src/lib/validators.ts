@@ -40,13 +40,9 @@ export const imageSchema = z.object({
       message: "Imagem é obrigatória.",
     })
     .refine(
-      (file) =>
-        file &&
-        file[0] &&
-        (file[0].type.startsWith("image/") ||
-          file[0].name.toLowerCase().endsWith(".ipv")),
+      (file) => file && file[0] && file[0].type.startsWith("image/"),
       {
-        message: "Apenas arquivos de imagem ou IPV são permitidos.",
+        message: "Apenas arquivos de imagem são permitidos.",
       }
     ),
   video: z.any().optional(),
