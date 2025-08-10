@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/components/Providers";
-import Footer from "@/components/Footer";
 import ApiStatusLogger from "@/components/ApiStatusLogger";
+import AppShell from "@/components/AppShell";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,11 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <ApiStatusLogger />
-          <Header />
-          <main className="container mx-auto p-4 md:p-8">
-            {children}
-          </main>
-          <Footer />
+          <AppShell>{children}</AppShell>
           <Toaster />
         </Providers>
       </body>

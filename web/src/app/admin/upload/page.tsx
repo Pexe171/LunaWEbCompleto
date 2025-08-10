@@ -5,8 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -21,19 +19,12 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 import { imageSchema } from "@/lib/validators";
-import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export default function UploadPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const { user, isAuthenticated } = useAuth();
-
-  useEffect(() => {
-    if (!isAuthenticated || user?.role !== 'admin') {
-      router.replace('/');
-    }
-  }, [isAuthenticated, user, router]);
 
   const form = useForm<z.infer<typeof imageSchema>>({
     resolver: zodResolver(imageSchema),
@@ -84,7 +75,7 @@ export default function UploadPage() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-8 p-4">
+    <div className="flex flex-col gap-8">
       <h1 className="text-3xl font-bold">Carregar Nova Imagem</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-xl space-y-6">
