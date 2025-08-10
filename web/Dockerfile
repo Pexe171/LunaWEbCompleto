@@ -18,4 +18,7 @@ COPY . .
 EXPOSE 3000
 
 # Define o comando para iniciar a aplicação em modo de desenvolvimento
-CMD ["npm", "run", "dev"]
+# Executa "npm install" em tempo de inicialização para garantir que
+# quaisquer novas dependências sejam instaladas quando a aplicação
+# estiver sendo executada com volumes montados.
+CMD ["sh", "-c", "npm install && npm run dev"]
