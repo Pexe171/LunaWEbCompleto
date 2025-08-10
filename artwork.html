@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/css/tokens.css">
+  <link rel="stylesheet" href="/public/css/base.css">
+  <link rel="stylesheet" href="/public/css/layout.css">
+  <link rel="stylesheet" href="/public/css/components.css">
+  <link rel="stylesheet" href="/public/css/pages/artwork.css">
+  <title>Obra - Galeria Pexe</title>
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="container header-inner">
+    <a class="logo" href="/">Galeria Pexe</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="/index.html" class="nav-link">Explorar</a>
+      <a href="#" class="nav-link">Artistas</a>
+    </nav>
+    <div class="actions">
+      <button class="btn btn-primary">Fazer Upload</button>
+      <a class="avatar" href="/auth.html" aria-label="Perfil">
+        <img src="/public/assets/img/avatar-default.svg" alt="Seu perfil">
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="artwork container">
+  <figure class="hero">
+    <img src="/public/assets/img/a1-large.svg" alt="Retrato em Terracota">
+  </figure>
+  <aside class="meta">
+    <h1 class="title">Retrato em Terracota</h1>
+    <a class="artist" href="#">
+      <img class="avatar" src="/public/assets/img/artist.svg" alt="Avatar">
+      <span>Ana Souza</span>
+    </a>
+    <p class="desc">Descrição da obra...</p>
+    <div class="tags">
+      <span class="tag">#retrato</span>
+      <span class="tag">#digital</span>
+    </div>
+    <div class="actions">
+      <button class="btn icon" aria-label="Curtir">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-4.35-9-7.5S-.5 5.5 2.25 3.75C5-1 12 4.5 12 4.5S19-1 21.75 3.75 21 13.5 12 21z"/></svg> Curtir
+      </button>
+      <button class="btn icon" aria-label="Compartilhar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.02-4.11A2.99 2.99 0 0018 7.91a3 3 0 10-2.83-4.11L8.15 7.91A3 3 0 006 7a3 3 0 000 6c1.3 0 2.4-.84 2.82-2l7.12 4.16a3 3 0 102.06-1.08z"/></svg> Compartilhar
+      </button>
+    </div>
+    <section class="comments" aria-label="Comentários">
+      <!-- lista de comentários -->
+    </section>
+  </aside>
+</main>
+</body>
+</html>

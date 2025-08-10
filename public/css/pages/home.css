@@ -1,0 +1,6 @@
+.masonry{column-gap:var(--space-6);}
+@media(min-width:480px){.masonry{column-count:2;}}
+@media(min-width:768px){.masonry{column-count:3;}}
+@media(min-width:1200px){.masonry{column-count:4;}}
+.art-card img{width:100%;display:block;}
+.art-card .overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:var(--space-4);color:var(--bg);background:rgba(147,66,50,0);opacity:0;transition:opacity var(--dur) var(--easing),background var(--dur) var(--easing);}

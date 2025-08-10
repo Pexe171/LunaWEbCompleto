@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/public/css/tokens.css">
+  <link rel="stylesheet" href="/public/css/base.css">
+  <link rel="stylesheet" href="/public/css/layout.css">
+  <link rel="stylesheet" href="/public/css/components.css">
+  <link rel="stylesheet" href="/public/css/pages/home.css">
+  <title>Galeria Pexe</title>
+</head>
+<body>
+<header class="site-header" role="banner">
+  <div class="container header-inner">
+    <a class="logo" href="/">Galeria Pexe</a>
+    <nav class="nav" aria-label="Principal">
+      <a href="/index.html" class="nav-link">Explorar</a>
+      <a href="#" class="nav-link">Artistas</a>
+    </nav>
+    <div class="actions">
+      <button class="btn btn-primary">Fazer Upload</button>
+      <a class="avatar" href="/auth.html" aria-label="Perfil">
+        <img src="/public/assets/img/avatar-default.svg" alt="Seu perfil">
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="filters container" aria-label="Filtros da galeria">
+  <div class="chips" role="listbox" aria-multiselectable="true">
+    <button class="chip is-active" aria-pressed="true">Tudo</button>
+    <button class="chip">Retrato</button>
+    <button class="chip">Paisagem</button>
+    <button class="chip">Concept</button>
+  </div>
+  <div class="search">
+    <input type="search" placeholder="Buscar por título, artista ou tag" aria-label="Buscar">
+  </div>
+</section>
+
+<main class="container">
+  <div class="masonry" style="opacity:0"></div>
+  <div class="loader" hidden>
+    <svg class="pencil" viewBox="0 0 24 24"><path d="M2 22l1-5 14-14 4 4-14 14-5 1z" fill="var(--secondary)"/></svg>
+    <svg class="wave" viewBox="0 0 64 6"><path d="M0 3q8-6 16 0t16 0 16 0 16 0"/></svg>
+  </div>
+</main>
+
+<script type="module" src="/public/js/app.js"></script>
+</body>
+</html>
