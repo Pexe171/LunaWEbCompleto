@@ -19,7 +19,9 @@ const getGalleryController = async (req, res, next) => {
 
 const createGalleryController = async (req, res, next) => {
     try {
-        const newImage = await galleryService.createGalleryImage(req.body);
+        const authorId = req.user._id;
+        const authorName = req.user.name || req.user.email;
+        const newImage = await galleryService.createGalleryImage({ ...req.body, authorId, authorName });
         res.status(201).json(newImage);
     } catch (err) {
         next(err);

@@ -19,7 +19,7 @@ export default function ImageCard({ image }: ImageCardProps) {
 
   return (
     <>
-      <Card className="relative group overflow-hidden cursor-pointer" onClick={() => setIsModalOpen(true)}>
+      <Card className="relative group overflow-hidden cursor-pointer opacity-0 animate-fade-in transition-shadow hover:shadow-lg" onClick={() => setIsModalOpen(true)}>
         <NextImage
           src={imageUrl}
           alt={image.title}
@@ -32,8 +32,13 @@ export default function ImageCard({ image }: ImageCardProps) {
         <div className="absolute top-2 right-2">
           <LikeButton imageId={image._id} />
         </div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white text-sm">
           <h3 className="font-semibold text-lg">{image.title}</h3>
+          <p className="text-xs">{image.authorName}</p>
+          <div className="flex gap-2 text-xs">
+            <span>{image.likes} ❤</span>
+            <span>{image.comments} 💬</span>
+          </div>
         </div>
       </Card>
       <Lightbox isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} image={image} />

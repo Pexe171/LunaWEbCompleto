@@ -11,6 +11,12 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Galeria de Imagens",
   description: "Uma galeria de imagens com autenticação e licenças.",
+  keywords: ["galeria", "arte", "imagens", "artistas"],
+  openGraph: {
+    title: "Galeria de Imagens",
+    description: "Compartilhe e descubra obras de arte digitais.",
+    type: "website",
+  }
 };
 
 export default function RootLayout({

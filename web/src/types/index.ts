@@ -5,6 +5,14 @@ import { UseMutateAsyncFunction } from "@tanstack/react-query";
 export interface User {
   email: string;
   licenseExpiresAt: string;
+  name?: string;
+  avatarUrl?: string;
+  bio?: string;
+  socialLinks?: {
+    website?: string;
+    instagram?: string;
+    twitter?: string;
+  };
 }
 
 export type LoginData = z.infer<typeof loginSchema>;
@@ -29,4 +37,7 @@ export interface Image {
   height?: number;
   tags?: string[];
   createdAt: string;
+  authorName: string;
+  likes: number;
+  comments: number;
 }

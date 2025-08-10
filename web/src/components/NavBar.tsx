@@ -26,6 +26,11 @@ export default function NavBar() {
             <Button variant="ghost">Upload</Button>
           </Link>
         )}
+        {isAuthenticated && (
+          <Link href="/profile">
+            <Button variant="ghost">Perfil</Button>
+          </Link>
+        )}
         {isAuthenticated && user && (
           <Link href="/license">
             <Badge variant={isLicensed ? "default" : "destructive"}>

@@ -10,6 +10,14 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     licenseExpiresAt: { type: Date, required: true },
+    name: { type: String },
+    avatarUrl: { type: String },
+    bio: { type: String },
+    socialLinks: {
+        website: { type: String },
+        instagram: { type: String },
+        twitter: { type: String }
+    },
     refreshTokens: [refreshTokenSchema]
 }, { timestamps: true });
 

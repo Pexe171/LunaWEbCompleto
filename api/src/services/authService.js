@@ -16,7 +16,11 @@ const login = async (email, password) => {
         refreshToken,
         user: {
             email: user.email,
-            licenseExpiresAt: user.licenseExpiresAt
+            licenseExpiresAt: user.licenseExpiresAt,
+            name: user.name,
+            avatarUrl: user.avatarUrl,
+            bio: user.bio,
+            socialLinks: user.socialLinks
         }
     };
 };

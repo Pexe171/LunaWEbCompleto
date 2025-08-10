@@ -1,5 +1,6 @@
 const Image = require('../models/Image');
 const Like = require('../models/Like');
+const Comment = require('../models/Comment');
 
 const createGalleryImage = async (imageData) => {
     const newImage = new Image(imageData);
@@ -15,7 +16,10 @@ const getGalleryImages = async (filters) => {
         query.tags = { $in: tags };
     }
     if (search) {
-        query.title = { $regex: search, $options: 'i' };
+        query.$or = [
+            { title: { $regex: search, $options: 'i' } },
+            { authorName: { $regex: search, $options: 'i' } }
+        ];
     }
 
     const totalCount = await Image.countDocuments(query);
@@ -24,8 +28,14 @@ const getGalleryImages = async (filters) => {
         .limit(limit)
         .sort({ createdAt: -1 });
 
+    const imagesWithCounts = await Promise.all(images.map(async (img) => {
+        const likes = await Like.countDocuments({ imageId: img._id });
+        const comments = await Comment.countDocuments({ imageId: img._id });
+        return { ...img.toObject(), likes, comments };
+    }));
+
     return {
-        images,
+        images: imagesWithCounts,
         totalCount,
         totalPages: Math.ceil(totalCount / limit),
         currentPage: page
