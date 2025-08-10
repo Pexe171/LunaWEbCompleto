@@ -106,11 +106,11 @@ export default function UploadPage() {
             name="image"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Imagem do Paint</FormLabel>
+                <FormLabel>Imagem</FormLabel>
                 <FormControl>
                   <Input
                     type="file"
-                    accept="image/*,.ipv"
+                    accept="image/*"
                     onChange={(e) => field.onChange(e.target.files)}
                   />
                 </FormControl>

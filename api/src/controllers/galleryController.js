@@ -1,8 +1,4 @@
 const galleryService = require('../services/galleryService');
-const { logger } = require('../config/logger');
-const path = require('path');
-const fs = require('fs');
-const { convertIPvToPNG } = require('../utils/ipvConverter');
 
 const getGalleryController = async (req, res, next) => {
     try {
@@ -36,28 +32,10 @@ const createGalleryController = async (req, res, next) => {
             : [];
 
         const baseUrl = `${req.protocol}://${req.get('host')}`;
-        let finalImageName = imageFile.filename;
-
-        // If the uploaded file is an IPv file, attempt to convert it to PNG
-        if (path.extname(imageFile.filename).toLowerCase() === '.ipv') {
-            const ipvPath = imageFile.path;
-            const pngName = imageFile.filename.replace(/\.ipv$/i, '.png');
-            const pngPath = path.join(imageFile.destination, pngName);
-            try {
-                await convertIPvToPNG(ipvPath, pngPath);
-                fs.unlinkSync(ipvPath);
-                finalImageName = pngName;
-            } catch (conversionErr) {
-                logger.error('Erro ao converter arquivo IPV', conversionErr);
-                return res.status(500).json({ message: 'Falha ao converter arquivo IPV.' });
-            }
-        }
-
-        const imageUrl = `${baseUrl}/uploads/images/${finalImageName}`;
+        const imageUrl = `${baseUrl}/uploads/images/${imageFile.filename}`;
         const data = {
             title: req.body.title,
         };
-
         data.url = imageUrl;
         if (videoFile) {
             data.videoUrl = `${baseUrl}/uploads/videos/${videoFile.filename}`;

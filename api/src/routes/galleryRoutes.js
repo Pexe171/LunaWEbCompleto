@@ -21,8 +21,25 @@ const storage = multer.diskStorage({
         cb(null, uniqueSuffix + path.extname(file.originalname));
     },
 });
+const fileFilter = (req, file, cb) => {
+    if (file.fieldname === 'image') {
+        if (['image/jpeg', 'image/png', 'image/gif'].includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Tipo de imagem não suportado.'), false);
+        }
+    } else if (file.fieldname === 'video') {
+        if (file.mimetype.startsWith('video/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Tipo de vídeo não suportado.'), false);
+        }
+    } else {
+        cb(new Error('Tipo de arquivo não suportado.'), false);
+    }
+};
 
-const upload = multer({ storage });
+const upload = multer({ storage, fileFilter });
 
 const createGalleryImageValidation = [
     body('title').isString().notEmpty().withMessage('Título é obrigatório.'),
