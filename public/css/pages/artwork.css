@@ -1,0 +1,12 @@
+.artwork{display:grid;gap:var(--space-8);grid-template-columns:1fr;}
+.hero img{width:100%;height:auto;border-radius:var(--radius-lg);box-shadow:var(--shadow-md);}
+.meta .title{font-family:var(--font-display);color:var(--primary);margin-top:0;}
+.meta .artist{display:flex;align-items:center;gap:var(--space-2);margin:var(--space-4) 0;text-decoration:none;color:inherit;}
+.meta .artist .avatar{width:48px;height:48px;border-radius:50%;overflow:hidden;}
+.meta .desc{margin-bottom:var(--space-4);}
+.meta .tags{display:flex;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-4);}
+.meta .tag{background:var(--accent);color:var(--text);border-radius:999px;padding:.35rem .7rem;}
+.meta .actions{display:flex;gap:var(--space-4);margin-bottom:var(--space-4);}
+.btn.icon{display:flex;align-items:center;gap:var(--space-2);border:1px solid var(--secondary);border-radius:var(--radius-md);padding:.5rem 1rem;color:var(--secondary);background:none;}
+.comments{margin-top:var(--space-4);}
+@media(min-width:768px){.artwork{grid-template-columns:2fr 1fr;}}
