@@ -22,6 +22,7 @@ export default function Home() {
   const { data, isLoading, isError } = useQuery<GalleryResponse>({
     queryKey: ['gallery', { technique, artist, date }],
     queryFn: () => api.get('/gallery', { params: { technique, artist, date } }).then(res => res.data),
+    retry: false,
   });
 
   if (isLoading) return <div>Carregando galeria...</div>;
