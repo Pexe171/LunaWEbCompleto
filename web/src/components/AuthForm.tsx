@@ -19,7 +19,7 @@ import { Loader2 } from "lucide-react";
 import { loginSchema, registerSchema } from "@/lib/validators";
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "./ui/use-toast";
+import { useToast } from "./ui/use-toast";
 import { api } from "@/lib/api";
 
 type AuthFormType = "login" | "register";
@@ -31,6 +31,7 @@ interface AuthFormProps {
 
 const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
   const router = useRouter();
+  const { toast } = useToast();
 
   const formSchema = type === "login" ? loginSchema : registerSchema;
 
@@ -48,10 +49,11 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
       toast({
         title: "Sucesso!",
         description: "Você foi autenticado com sucesso.",
+        variant: "default",
       });
       router.push('/');
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Erro na autenticação",
         description: error.response?.data?.message || "Ocorreu um erro.",
