@@ -39,18 +39,26 @@ export default function UploadPage() {
     resolver: zodResolver(imageSchema),
     defaultValues: {
       title: "",
-      url: "",
-      tags: ""
+      image: undefined,
+      video: undefined,
+      tags: "",
     },
   });
 
   const uploadMutation = useMutation({
     mutationFn: (data: z.infer<typeof imageSchema>) => {
-      const tagsArray = (data.tags ?? "")
-        .split(',')
-        .map(tag => tag.trim())
-        .filter(tag => tag);
-      return api.post('/gallery', { ...data, tags: tagsArray });
+      const formData = new FormData();
+      formData.append('title', data.title);
+      formData.append('tags', data.tags ?? '');
+      if (data.image && data.image.length > 0) {
+        formData.append('image', data.image[0]);
+      }
+      if (data.video && data.video.length > 0) {
+        formData.append('video', data.video[0]);
+      }
+      return api.post('/gallery', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
     },
     onSuccess: () => {
       toast({
@@ -95,14 +103,26 @@ export default function UploadPage() {
           />
           <FormField
             control={form.control}
-            name="url"
+            name="image"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>URL da Imagem</FormLabel>
+                <FormLabel>Imagem do Paint</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ex: https://example.com/image.jpg" {...field} />
+                  <Input type="file" accept="image/*" onChange={(e) => field.onChange(e.target.files)} />
                 </FormControl>
-                <FormDescription>Cole um link direto da imagem (ou Google Drive).</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="video"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Vídeo (opcional)</FormLabel>
+                <FormControl>
+                  <Input type="file" accept="video/*" onChange={(e) => field.onChange(e.target.files)} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

@@ -34,15 +34,11 @@ export const passwordSchema = z.object({
 
 export const imageSchema = z.object({
   title: z.string().min(1, { message: "Título é obrigatório." }),
-  url: z.string().optional().refine(val => {
-    if (val) {
-      try { new URL(val); return true; } catch { return false; }
-    }
-    return true;
-  }, { message: "URL inválida." }),
-  fileId: z.string().optional(),
+  image: z
+    .any()
+    .refine((file) => file && file.length > 0, {
+      message: "Imagem é obrigatória.",
+    }),
+  video: z.any().optional(),
   tags: z.string().optional(),
-}).refine(data => !!data.url || !!data.fileId, {
-  message: "Pelo menos uma URL ou um FileId deve ser fornecido.",
-  path: ["url"]
 });

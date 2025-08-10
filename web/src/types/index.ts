@@ -27,6 +27,7 @@ export interface Image {
   title: string;
   url?: string;
   fileId?: string;
+  videoUrl?: string;
   description?: string;
   artist?: string;
   technique?: string;
