@@ -25,6 +25,9 @@ export interface Image {
   title: string;
   url?: string;
   fileId?: string;
+  description?: string;
+  artist?: string;
+  technique?: string;
   width?: number;
   height?: number;
   tags?: string[];
