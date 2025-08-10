@@ -1,0 +1,423 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API de Autenticação e Licenças",
+    "description": "Documentação da API para um sistema de galeria de imagens com autenticação de usuário, controle de licenças e gestão de conteúdo.",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3333",
+  "basePath": "/api/v1",
+  "schemes": ["http"],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/auth/create-user": {
+      "post": {
+        "summary": "Cria um novo usuário",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "Dados do usuário para criação de conta",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "licenseDays": {
+                  "type": "number",
+                  "description": "Número opcional de dias para a licença inicial"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Usuário criado com sucesso"
+          },
+          "400": {
+            "description": "Erro de validação"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Autentica um usuário e retorna tokens JWT",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "credentials",
+            "description": "Credenciais de login do usuário",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login bem-sucedido",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accessToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string"
+                    },
+                    "licenseExpiresAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas"
+          }
+        }
+      }
+    },
+    "/auth/refresh-token": {
+      "post": {
+        "summary": "Rotaciona o refresh token para obter um novo par de tokens",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "token",
+            "description": "Refresh token a ser validado",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refreshToken": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tokens atualizados",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accessToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Refresh token inválido ou expirado"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "Invalida o refresh token atual do usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout bem-sucedido"
+          },
+          "401": {
+            "description": "Token de acesso inválido"
+          }
+        }
+      }
+    },
+    "/license/verify-license": {
+      "get": {
+        "summary": "Verifica se a licença do usuário logado é válida",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Status da licença retornado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "valid": {
+                  "type": "boolean"
+                },
+                "licenseExpiresAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de acesso inválido"
+          }
+        }
+      }
+    },
+    "/license/renew-license": {
+      "post": {
+        "summary": "Renova a licença do usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "days",
+            "description": "Número opcional de dias para renovação",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "days": {
+                  "type": "number",
+                  "description": "Número de dias para adicionar à licença"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Licença renovada com sucesso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "licenseExpiresAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token de acesso inválido"
+          }
+        }
+      }
+    },
+    "/gallery": {
+      "get": {
+        "summary": "Lista todas as imagens da galeria",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "tags",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Filtro por tags"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "type": "string",
+            "description": "Busca por título da imagem"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "description": "Número da página para paginação"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "type": "integer",
+            "description": "Número de itens por página"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de imagens"
+          }
+        }
+      },
+      "post": {
+        "summary": "Adiciona uma nova imagem à galeria (Requer autenticação e licença válida)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "image",
+            "description": "Dados da imagem a ser criada",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "fileId": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "number"
+                },
+                "height": {
+                  "type": "number"
+                },
+                "tags": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Imagem criada com sucesso"
+          },
+          "401": {
+            "description": "Não autorizado ou licença inválida"
+          }
+        }
+      }
+    },
+    "/gallery/{imageId}/like": {
+      "post": {
+        "summary": "Curte uma imagem (Requer autenticação e licença válida)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "imageId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Like adicionado com sucesso"
+          },
+          "401": {
+            "description": "Não autorizado ou licença inválida"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Descurte uma imagem (Requer autenticação e licença válida)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "imageId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Like removido com sucesso"
+          },
+          "401": {
+            "description": "Não autorizado ou licença inválida"
+          }
+        }
+      }
+    }
+  }
+}
