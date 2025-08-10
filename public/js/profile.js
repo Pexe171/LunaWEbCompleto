@@ -1,7 +1,7 @@
 import { enhanceMasonry } from './modules/masonry.js';
 import { fadeIn, showLoader, hideLoader } from './modules/animations.js';
 
-const USER_NAME = 'Ana Souza';
+const USER_NAME = 'Luna';
 
 async function load(){
   showLoader();

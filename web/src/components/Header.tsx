@@ -25,7 +25,6 @@ export default function Header() {
         <nav className="ml-8 flex gap-4 text-foreground">
           <Link href="/">Início</Link>
           <Link href="/galeria">Galeria</Link>
-          <Link href="/artistas">Artistas</Link>
           <Link href="/sobre">Sobre</Link>
         </nav>
 
