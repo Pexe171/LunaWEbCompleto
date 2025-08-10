@@ -21,7 +21,7 @@ export default function NavBar() {
         Galeria
       </Link>
       <div className="flex items-center space-x-4">
-        {isAuthenticated && (
+        {isAuthenticated && user?.role === 'admin' && (
           <Link href="/admin/upload">
             <Button variant="ghost">Upload</Button>
           </Link>

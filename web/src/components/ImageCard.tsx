@@ -19,7 +19,10 @@ export default function ImageCard({ image }: ImageCardProps) {
 
   return (
     <>
-      <Card className="relative group overflow-hidden cursor-pointer" onClick={() => setIsModalOpen(true)}>
+      <Card
+        className="relative group overflow-hidden cursor-pointer"
+        onClick={() => setIsModalOpen(true)}
+      >
         <NextImage
           src={imageUrl}
           alt={image.title}
@@ -29,11 +32,14 @@ export default function ImageCard({ image }: ImageCardProps) {
           placeholder="blur"
           blurDataURL={`data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjREREREREIiAvPjwvc3ZnPg==`}
         />
-        <div className="absolute top-2 right-2">
-          <LikeButton imageId={image._id} />
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
-          <h3 className="font-semibold text-lg">{image.title}</h3>
+        <div className="absolute inset-0 flex flex-col justify-between p-4 bg-primary/85 opacity-0 group-hover:opacity-100 transition">
+          <div className="flex justify-end">
+            <LikeButton imageId={image._id} />
+          </div>
+          <div className="text-background">
+            <h3 className="font-semibold text-lg">{image.title}</h3>
+            {image.artist && <p className="text-sm">{image.artist}</p>}
+          </div>
         </div>
       </Card>
       <Lightbox isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} image={image} />
