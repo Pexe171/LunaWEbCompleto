@@ -28,11 +28,19 @@ export default function Header() {
               <Button className="font-semibold">Fazer Upload</Button>
             </Link>
           )}
-          <Link href="/login">
-            <Button variant="ghost" size="icon" aria-label="Entrar">
-              <User className="h-5 w-5" />
-            </Button>
-          </Link>
+          {isAuthenticated ? (
+            <Link href="/profile">
+              <Button variant="ghost" size="icon" aria-label="Perfil">
+                <User className="h-5 w-5" />
+              </Button>
+            </Link>
+          ) : (
+            <Link href="/login">
+              <Button variant="ghost" size="icon" aria-label="Entrar">
+                <User className="h-5 w-5" />
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>

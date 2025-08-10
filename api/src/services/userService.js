@@ -22,4 +22,28 @@ const createUser = async (
   return newUser;
 };
 
-module.exports = { createUser };
+const getUserById = async (id) => {
+  return User.findById(id).select('-password -refreshTokens');
+};
+
+const updateUserProfile = async (id, data) => {
+  return User.findByIdAndUpdate(id, {
+    name: data.name,
+    bio: data.bio,
+  }, { new: true }).select('-password -refreshTokens');
+};
+
+const changePassword = async (id, currentPassword, newPassword) => {
+  const user = await User.findById(id);
+  if (!user) {
+    throw new Error('Usuário não encontrado.');
+  }
+  const isMatch = await user.comparePassword(currentPassword);
+  if (!isMatch) {
+    throw new Error('Senha atual incorreta.');
+  }
+  user.password = newPassword;
+  await user.save();
+};
+
+module.exports = { createUser, getUserById, updateUserProfile, changePassword };

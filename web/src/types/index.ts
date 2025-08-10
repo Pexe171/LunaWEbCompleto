@@ -4,6 +4,8 @@ import { UseMutateAsyncFunction } from "@tanstack/react-query";
 
 export interface User {
   email: string;
+  name?: string;
+  bio?: string;
   licenseExpiresAt: string;
   role: 'user' | 'admin';
 }
