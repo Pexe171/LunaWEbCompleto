@@ -4,14 +4,18 @@ const { logger } = require('../config/logger');
 const getGalleryController = async (req, res, next) => {
     try {
         const { tags, search, page, limit, technique, artist, date } = req.query;
+
+        const parsedPage = parseInt(page, 10);
+        const parsedLimit = parseInt(limit, 10);
+
         const filters = {
             tags: tags ? tags.split(',') : undefined,
             search,
             technique,
             artist,
             date,
-            page: parseInt(page, 10),
-            limit: parseInt(limit, 10)
+            page: Number.isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage,
+            limit: Number.isNaN(parsedLimit) || parsedLimit < 1 ? 10 : parsedLimit
         };
         const result = await galleryService.getGalleryImages(filters);
         res.json(result);
