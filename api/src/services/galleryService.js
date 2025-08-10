@@ -64,4 +64,12 @@ const removeLike = async (userId, imageId) => {
     await Like.deleteOne({ userId, imageId });
 };
 
-module.exports = { createGalleryImage, getGalleryImages, addLike, removeLike };
+const deleteGalleryImage = async (imageId) => {
+    const image = await Image.findByIdAndDelete(imageId);
+    if (image) {
+        await Like.deleteMany({ imageId });
+    }
+    return image;
+};
+
+module.exports = { createGalleryImage, getGalleryImages, addLike, removeLike, deleteGalleryImage };

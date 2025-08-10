@@ -1,4 +1,6 @@
 const galleryService = require('../services/galleryService');
+const fs = require('fs');
+const path = require('path');
 
 const getGalleryController = async (req, res, next) => {
     try {
@@ -73,4 +75,28 @@ const removeLikeController = async (req, res, next) => {
     }
 };
 
-module.exports = { getGalleryController, createGalleryController, addLikeController, removeLikeController };
+const deleteGalleryController = async (req, res, next) => {
+    try {
+        const { imageId } = req.params;
+        const deletedImage = await galleryService.deleteGalleryImage(imageId);
+        if (!deletedImage) {
+            return res.status(404).json({ message: 'Imagem não encontrada.' });
+        }
+
+        if (deletedImage.url) {
+            const imageFile = path.basename(deletedImage.url);
+            const imagePath = path.join(__dirname, '..', '..', 'uploads', 'images', imageFile);
+            fs.unlink(imagePath, () => {});
+        }
+        if (deletedImage.videoUrl) {
+            const videoFile = path.basename(deletedImage.videoUrl);
+            const videoPath = path.join(__dirname, '..', '..', 'uploads', 'videos', videoFile);
+            fs.unlink(videoPath, () => {});
+        }
+
+        res.status(200).json({ message: 'Imagem removida.' });
+    } catch (err) {
+        next(err);
+    }
+};
+module.exports = { getGalleryController, createGalleryController, addLikeController, removeLikeController, deleteGalleryController };
