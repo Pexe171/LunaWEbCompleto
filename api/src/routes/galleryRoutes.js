@@ -1,6 +1,6 @@
 const express = require('express');
 const { body, param } = require('express-validator');
-const { getGalleryController, createGalleryController, addLikeController, removeLikeController } = require('../controllers/galleryController');
+const { getGalleryController, createGalleryController, addLikeController, removeLikeController, deleteGalleryController } = require('../controllers/galleryController');
 const { authMiddleware, adminMiddleware } = require('../middlewares/auth');
 const { validate } = require('../middlewares/validate');
 const multer = require('multer');
@@ -54,6 +54,14 @@ router.post(
     createGalleryImageValidation,
     validate,
     createGalleryController
+);
+router.delete(
+    '/:imageId',
+    authMiddleware,
+    adminMiddleware,
+    [param('imageId').isMongoId().withMessage('ID de imagem inválido.')],
+    validate,
+    deleteGalleryController
 );
 router.post('/:imageId/like', authMiddleware, [param('imageId').isMongoId().withMessage('ID de imagem inválido.')], validate, addLikeController);
 router.delete('/:imageId/like', authMiddleware, [param('imageId').isMongoId().withMessage('ID de imagem inválido.')], validate, removeLikeController);
