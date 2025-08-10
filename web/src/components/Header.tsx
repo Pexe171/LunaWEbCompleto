@@ -30,8 +30,8 @@ export default function Header() {
 
         <div className="ml-auto flex items-center gap-4">
           {isAuthenticated && user?.role === "admin" && (
-            <Link href="/admin/upload">
-              <Button className="font-semibold">Fazer Upload</Button>
+            <Link href="/admin">
+              <Button className="font-semibold">Dashboard</Button>
             </Link>
           )}
           {isAuthenticated ? (
