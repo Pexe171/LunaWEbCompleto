@@ -34,6 +34,7 @@ export default function ImageCard({ image }: ImageCardProps) {
         </div>
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
           <h3 className="font-semibold text-lg">{image.title}</h3>
+          <p className="text-sm">por {image.artist}</p>
         </div>
       </Card>
       <Lightbox isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} image={image} />

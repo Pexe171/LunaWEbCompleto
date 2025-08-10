@@ -23,6 +23,7 @@ export interface AuthContextType {
 export interface Image {
   _id: string;
   title: string;
+  artist: string;
   url?: string;
   fileId?: string;
   width?: number;

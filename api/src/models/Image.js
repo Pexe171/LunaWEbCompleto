@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const imageSchema = new mongoose.Schema({
     title: { type: String, required: true },
+    artist: { type: String, required: true, default: 'Desconhecido' },
     url: { type: String, required: true },
     tags: [{ type: String }],
     createdAt: { type: Date, default: Date.now }
