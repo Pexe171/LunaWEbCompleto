@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --background: #f5f5f0;
-  --foreground: #2e2e2e;
-  --highlight-blue: #a8d8ea;
-  --highlight-blue-hover: #92c5d6;
-  --highlight-aqua: #b8e6d5;
-  --highlight-aqua-hover: #a1d4c0;
-  --highlight-salmon: #ffb4a2;
-  --highlight-salmon-hover: #e89d8d;
+  --background: #FAEBB8;
+  --foreground: #383838;
+  --color-primary: #934232;
+  --color-primary-foreground: #FAEBB8;
+  --color-secondary: #416693;
+  --color-secondary-foreground: #FAEBB8;
+  --color-soft: #FECAC8;
+  --color-soft-foreground: #383838;
 }
 
 body {
@@ -24,7 +24,7 @@ body {
 }
 
 a {
-  color: var(--highlight-blue);
+  color: var(--color-secondary);
 }
 
 @layer components {
@@ -35,22 +35,28 @@ a {
     color: var(--foreground);
     transition: background-color 0.3s ease;
   }
-  .btn-blue {
-    background-color: var(--highlight-blue);
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
   }
-  .btn-blue:hover {
-    background-color: var(--highlight-blue-hover);
+  .btn-primary:hover {
+    background-color: var(--color-primary);
+    opacity: 0.9;
   }
-  .btn-aqua {
-    background-color: var(--highlight-aqua);
+  .btn-secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-foreground);
   }
-  .btn-aqua:hover {
-    background-color: var(--highlight-aqua-hover);
+  .btn-secondary:hover {
+    background-color: var(--color-secondary);
+    opacity: 0.9;
   }
-  .btn-salmon {
-    background-color: var(--highlight-salmon);
+  .btn-soft {
+    background-color: var(--color-soft);
+    color: var(--color-soft-foreground);
   }
-  .btn-salmon:hover {
-    background-color: var(--highlight-salmon-hover);
+  .btn-soft:hover {
+    background-color: var(--color-soft);
+    opacity: 0.9;
   }
 }

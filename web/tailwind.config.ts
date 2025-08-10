@@ -10,12 +10,18 @@ module.exports = {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
-        'highlight-blue': 'var(--highlight-blue)',
-        'highlight-blue-hover': 'var(--highlight-blue-hover)',
-        'highlight-aqua': 'var(--highlight-aqua)',
-        'highlight-aqua-hover': 'var(--highlight-aqua-hover)',
-        'highlight-salmon': 'var(--highlight-salmon)',
-        'highlight-salmon-hover': 'var(--highlight-salmon-hover)',
+        primary: {
+          DEFAULT: 'var(--color-primary)',
+          foreground: 'var(--color-primary-foreground)',
+        },
+        secondary: {
+          DEFAULT: 'var(--color-secondary)',
+          foreground: 'var(--color-secondary-foreground)',
+        },
+        soft: {
+          DEFAULT: 'var(--color-soft)',
+          foreground: 'var(--color-soft-foreground)',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

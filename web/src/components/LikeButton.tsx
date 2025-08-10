@@ -41,13 +41,19 @@ export default function LikeButton({ imageId }: LikeButtonProps) {
     return null;
   }
 
-  const handleLike = () => {
+  const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     likeMutation.mutate();
   };
 
   return (
-    <Button variant="ghost" size="icon" onClick={handleLike} className="bg-white/50 hover:bg-white">
-      <Heart className="h-6 w-6 text-red-500" />
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={handleLike}
+      className="bg-transparent hover:bg-soft/20"
+    >
+      <Heart className="h-6 w-6 text-soft" />
     </Button>
   );
 }
