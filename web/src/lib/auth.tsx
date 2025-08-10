@@ -49,13 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLocalRefreshToken(res.data.refreshToken);
       queryClient.setQueryData(['auth'], { user: res.data.user });
     },
-    onError: (error: any) => {
-      toast({
-        title: "Erro de Login",
-        description: error.response?.data?.message || "Credenciais inválidas.",
-        variant: "destructive",
-      });
-    },
   });
 
   const loginGoogleMutation = useMutation({
@@ -96,21 +89,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const registerMutation = useMutation({
     mutationFn: (data: RegisterData) => api.post('/auth/create-user', data),
-    onSuccess: () => {
-      toast({
-        title: "Cadastro efetuado",
-        description: "Sua conta foi criada. Faça login para continuar.",
-        variant: "default",
-      });
-      router.push('/login');
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Erro no Cadastro",
-        description: error.response?.data?.message || "Ocorreu um erro no cadastro.",
-        variant: "destructive",
-      });
-    },
   });
 
   const logoutMutation = useMutation({
