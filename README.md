@@ -1,11 +1,11 @@
  
-# Projeto de Galeria de Imagens com Autenticação e Licenças
+# Projeto de Galeria de Imagens com Autenticação
 
-Este é um monorepo que contém uma API Node.js/Express e um aplicativo web Next.js para uma galeria de imagens. A API gerencia a autenticação de usuários e um sistema de licenças, enquanto o aplicativo web consome essa API para exibir imagens, permitir likes e gerenciar o upload de novas imagens.
+Este é um monorepo que contém uma API Node.js/Express e um aplicativo web Next.js para uma galeria de imagens. A API gerencia a autenticação de usuários, enquanto o aplicativo web consome essa API para exibir imagens, permitir likes e gerenciar o upload de novas imagens.
 
 ## Estrutura do Projeto
 
-- `api/`: Backend em Node.js com Express, MongoDB, e JWT para autenticação e controle de licenças.
+- `api/`: Backend em Node.js com Express, MongoDB, e JWT para autenticação.
 - `web/`: Frontend em Next.js 14 com TypeScript, Tailwind CSS e shadcn/ui.
 - `docker-compose.yml`: Orquestração de todos os serviços (MongoDB, API e Web) para fácil inicialização.
 

@@ -27,14 +27,6 @@ const authMiddleware = async (req, res, next) => {
     }
 };
 
-const checkLicenseMiddleware = (req, res, next) => {
-    const isLicenseValid = req.user.licenseExpiresAt > new Date();
-    if (!isLicenseValid) {
-        return res.status(403).json({ message: 'Licença expirada. Renove sua licença para continuar.' });
-    }
-    next();
-};
-
 const adminMiddleware = (req, res, next) => {
     if (req.user.role !== 'admin') {
         return res.status(403).json({ message: 'Acesso negado.' });
@@ -42,4 +34,4 @@ const adminMiddleware = (req, res, next) => {
     next();
 };
 
-module.exports = { authMiddleware, checkLicenseMiddleware, adminMiddleware };
+module.exports = { authMiddleware, adminMiddleware };

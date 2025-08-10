@@ -21,7 +21,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
-import { format } from "date-fns";
 
 export default function ProfilePage() {
   const { user, logout, isAuthenticated, isInitialized } = useAuth();
@@ -115,11 +114,6 @@ export default function ProfilePage() {
           <p className="mb-4 text-sm text-gray-500">
             Email: {user?.email}
           </p>
-          {user?.licenseExpiresAt && (
-            <p className="mb-4 text-sm text-gray-500">
-              Licença expira em: {format(new Date(user.licenseExpiresAt), "dd/MM/yyyy")}
-            </p>
-          )}
           <Form {...profileForm}>
             <form
               onSubmit={profileForm.handleSubmit((data) => profileMutation.mutate(data))}

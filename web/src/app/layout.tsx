@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Galeria de Imagens",
-  description: "Uma galeria de imagens com autenticação e licenças.",
+  description: "Uma galeria de imagens com autenticação.",
 };
 
 export default function RootLayout({

@@ -12,7 +12,7 @@ interface LikeButtonProps {
 }
 
 export default function LikeButton({ imageId }: LikeButtonProps) {
-  const { isLicensed, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -31,13 +31,13 @@ export default function LikeButton({ imageId }: LikeButtonProps) {
     onError: () => {
       toast({
         title: "Erro ao curtir",
-        description: "Você não tem permissão para curtir ou a licença expirou.",
+        description: "Você não tem permissão para curtir.",
         variant: "destructive",
       });
     }
   });
 
-  if (!isAuthenticated || !isLicensed) {
+  if (!isAuthenticated) {
     return null;
   }
 

@@ -3,11 +3,10 @@
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
 import { useRouter } from "next/navigation";
 
 export default function NavBar() {
-  const { user, isAuthenticated, isLicensed, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -29,13 +28,6 @@ export default function NavBar() {
         {isAuthenticated && (
           <Link href="/profile">
             <Button variant="ghost">Perfil</Button>
-          </Link>
-        )}
-        {isAuthenticated && user && (
-          <Link href="/license">
-            <Badge variant={isLicensed ? "default" : "destructive"}>
-              {isLicensed ? "Licença Válida" : "Licença Expirada"}
-            </Badge>
           </Link>
         )}
         {isAuthenticated ? (
