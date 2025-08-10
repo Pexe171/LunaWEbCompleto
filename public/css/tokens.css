@@ -27,5 +27,5 @@
 
 [data-theme="dark"]{
   --bg: #1a1a1a;
-  --text: #FAEBB8;
+  --text: #FAEBB8; /* mantém paleta existente no dark */
 }
