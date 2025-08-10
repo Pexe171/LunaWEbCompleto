@@ -4,9 +4,16 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { User } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/login");
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-background border-b border-secondary">
@@ -28,11 +35,24 @@ export default function Header() {
               <Button className="font-semibold">Fazer Upload</Button>
             </Link>
           )}
-          <Link href="/login">
-            <Button variant="ghost" size="icon" aria-label="Entrar">
-              <User className="h-5 w-5" />
-            </Button>
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link href="/profile">
+                <Button variant="ghost" size="icon" aria-label="Perfil">
+                  <User className="h-5 w-5" />
+                </Button>
+              </Link>
+              <Button variant="outline" onClick={handleLogout}>
+                Sair
+              </Button>
+            </>
+          ) : (
+            <Link href="/login">
+              <Button variant="ghost" size="icon" aria-label="Entrar">
+                <User className="h-5 w-5" />
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>
