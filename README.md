@@ -76,3 +76,9 @@ Para parar os serviços, pressione `Ctrl + C` no terminal e depois execute: `doc
 ├─ docker-compose.yml
 ├─ api/
 └─ web/
+```
+
+<div class="note">
+  <h2>Build e Execução</h2>
+  <p>Para gerar a versão de produção do frontend, navegue até <code>web/</code>, execute <code>npm run build</code> e em seguida <code>npm start</code>.</p>
+</div>
