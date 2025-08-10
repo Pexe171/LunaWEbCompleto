@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/components/Providers";
 import Footer from "@/components/Footer";
+import ApiStatusLogger from "@/components/ApiStatusLogger";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="pt-br">
       <body className={inter.className}>
         <Providers>
+          <ApiStatusLogger />
           <Header />
           <main className="container mx-auto p-4 md:p-8">
             {children}
