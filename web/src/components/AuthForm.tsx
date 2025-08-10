@@ -50,19 +50,25 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
     mutationFn: onSubmit,
     onSuccess: () => {
       toast({
-        title: "Sucesso!",
-        description: "Você foi autenticado com sucesso.",
+        title: type === "login" ? "Sucesso!" : "Cadastro efetuado",
+        description:
+          type === "login"
+            ? "Você foi autenticado com sucesso."
+            : "Sua conta foi criada. Faça login para continuar.",
         variant: "default",
       });
-      router.push('/');
+      router.push(type === "login" ? "/" : "/login");
     },
     onError: (error: any) => {
+      console.error(error);
       toast({
-        title: "Erro na autenticação",
-        description: error.response?.data?.message || "Ocorreu um erro.",
+        title: type === "login" ? "Erro na autenticação" : "Erro no cadastro",
+        description:
+          error.response?.data?.message ||
+          (type === "login" ? "Ocorreu um erro." : "Ocorreu um erro no cadastro."),
         variant: "destructive",
       });
-    }
+    },
   });
 
   function handleSubmit(data: z.infer<typeof formSchema>) {
