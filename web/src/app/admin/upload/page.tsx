@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import {
   Form,
   FormControl,
@@ -20,11 +21,19 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 import { imageSchema } from "@/lib/validators";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function UploadPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { user, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (!isAuthenticated || user?.role !== 'admin') {
+      router.replace('/');
+    }
+  }, [isAuthenticated, user, router]);
 
   const form = useForm<z.infer<typeof imageSchema>>({
     resolver: zodResolver(imageSchema),

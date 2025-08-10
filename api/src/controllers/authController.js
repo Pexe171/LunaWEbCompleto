@@ -5,8 +5,8 @@ const { logger } = require('../config/logger');
 
 const createUserController = async (req, res, next) => {
     try {
-        const { email, password, licenseDays } = req.body;
-        const newUser = await userService.createUser(email, password, licenseDays);
+        const { email, password, licenseDays, role } = req.body;
+        const newUser = await userService.createUser(email, password, licenseDays, role);
         res.status(201).json({ message: 'Usuário criado com sucesso!', userId: newUser._id });
     } catch (err) {
         next(err);

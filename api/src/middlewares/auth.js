@@ -35,4 +35,11 @@ const checkLicenseMiddleware = (req, res, next) => {
     next();
 };
 
-module.exports = { authMiddleware, checkLicenseMiddleware };
+const adminMiddleware = (req, res, next) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Acesso negado.' });
+    }
+    next();
+};
+
+module.exports = { authMiddleware, checkLicenseMiddleware, adminMiddleware };
