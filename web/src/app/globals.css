@@ -11,7 +11,11 @@
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background-color: var(--background);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    radial-gradient(circle at 3px 3px, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 4px 4px;
   transition: color 0.3s ease, background 0.3s ease;
 }
 
