@@ -35,3 +35,10 @@ export interface Image {
   tags?: string[];
   createdAt: string;
 }
+
+export interface Artist {
+  _id: string;
+  name: string;
+  bio: string;
+  avatarUrl: string;
+}
