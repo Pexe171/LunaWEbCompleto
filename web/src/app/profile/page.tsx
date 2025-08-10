@@ -24,25 +24,31 @@ import { z } from "zod";
 import { format } from "date-fns";
 
 export default function ProfilePage() {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, isInitialized } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (isInitialized && !isAuthenticated) {
       router.push("/login");
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, isInitialized, router]);
 
   useEffect(() => {
-    api
-      .get("/users/me")
-      .then((res) => {
-        queryClient.setQueryData(["auth"], { user: res.data });
-      })
-      .catch(() => {});
-  }, [queryClient]);
+    if (isAuthenticated) {
+      api
+        .get("/users/me")
+        .then((res) => {
+          queryClient.setQueryData(["auth"], { user: res.data });
+        })
+        .catch(() => {});
+    }
+  }, [isAuthenticated, queryClient]);
+
+  if (!isInitialized) {
+    return null;
+  }
 
   const profileForm = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),

@@ -18,6 +18,7 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   isLicensed: boolean;
   isLoading: boolean;
+  isInitialized: boolean;
   login: UseMutateAsyncFunction<any, Error, LoginData, unknown>;
   register: UseMutateAsyncFunction<any, Error, RegisterData, unknown>;
   logout: UseMutateAsyncFunction<void, Error, void, unknown>;

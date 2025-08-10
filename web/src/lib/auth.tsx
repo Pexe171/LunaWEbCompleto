@@ -30,12 +30,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const [accessToken, setLocalAccessToken] = useState<string | null>(null);
   const [refreshToken, setLocalRefreshToken] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     const storedAccessToken = getAccessToken();
     const storedRefreshToken = getRefreshToken();
     if (storedAccessToken) setLocalAccessToken(storedAccessToken);
     if (storedRefreshToken) setLocalRefreshToken(storedRefreshToken);
+    setIsInitialized(true);
   }, []);
 
   const loginMutation = useMutation({
@@ -96,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       loginMutation.isPending ||
       registerMutation.isPending ||
       isLicenseLoading,
+    isInitialized,
     login: loginMutation.mutateAsync,
     register: registerMutation.mutateAsync,
     logout: logoutMutation.mutateAsync,
