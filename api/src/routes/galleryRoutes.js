@@ -1,7 +1,7 @@
 const express = require('express');
 const { body, param } = require('express-validator');
 const { getGalleryController, createGalleryController, addLikeController, removeLikeController } = require('../controllers/galleryController');
-const { authMiddleware, checkLicenseMiddleware, adminMiddleware } = require('../middlewares/auth');
+const { authMiddleware, adminMiddleware } = require('../middlewares/auth');
 const { validate } = require('../middlewares/validate');
 
 const router = express.Router();
@@ -18,8 +18,8 @@ const createGalleryImageValidation = [
 ];
 
 router.get('/', getGalleryController);
-router.post('/', authMiddleware, adminMiddleware, checkLicenseMiddleware, createGalleryImageValidation, validate, createGalleryController);
-router.post('/:imageId/like', authMiddleware, checkLicenseMiddleware, [param('imageId').isMongoId().withMessage('ID de imagem inválido.')], validate, addLikeController);
-router.delete('/:imageId/like', authMiddleware, checkLicenseMiddleware, [param('imageId').isMongoId().withMessage('ID de imagem inválido.')], validate, removeLikeController);
+router.post('/', authMiddleware, adminMiddleware, createGalleryImageValidation, validate, createGalleryController);
+router.post('/:imageId/like', authMiddleware, [param('imageId').isMongoId().withMessage('ID de imagem inválido.')], validate, addLikeController);
+router.delete('/:imageId/like', authMiddleware, [param('imageId').isMongoId().withMessage('ID de imagem inválido.')], validate, removeLikeController);
 
 module.exports = router;

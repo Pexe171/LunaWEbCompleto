@@ -4,7 +4,6 @@ import { UseMutateAsyncFunction } from "@tanstack/react-query";
 
 export interface User {
   email: string;
-  licenseExpiresAt: string;
   role: 'user' | 'admin';
   name?: string;
   bio?: string;
@@ -16,7 +15,6 @@ export type RegisterData = z.infer<typeof registerSchema>;
 export interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  isLicensed: boolean;
   isLoading: boolean;
   isInitialized: boolean;
   login: UseMutateAsyncFunction<any, Error, LoginData, unknown>;

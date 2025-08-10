@@ -3,7 +3,7 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import { api } from './api';
 import { User, AuthContextType, LoginData, RegisterData } from '@/types';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/components/ui/use-toast';
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -67,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('refreshToken');
       setLocalAccessToken(null);
       setLocalRefreshToken(null);
-      queryClient.setQueryData(['auth'], { user: null, isLicensed: false });
+      queryClient.setQueryData(['auth'], { user: null });
     },
     onError: () => {
       toast({
@@ -79,26 +79,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('refreshToken');
       setLocalAccessToken(null);
       setLocalRefreshToken(null);
-      queryClient.setQueryData(['auth'], { user: null, isLicensed: false });
+      queryClient.setQueryData(['auth'], { user: null });
     },
-  });
-
-  const { data: licenseStatus, isLoading: isLicenseLoading } = useQuery({
-    queryKey: ['license'],
-    queryFn: () => api.get('/license/verify-license').then(res => res.data),
-    enabled: !!accessToken,
-    retry: false,
-    refetchInterval: 60 * 1000 * 5 // Refreshes license status every 5 minutes
   });
 
   const value = {
     user: (queryClient.getQueryData(['auth']) as { user: User | null })?.user,
     isAuthenticated: !!accessToken,
-    isLicensed: licenseStatus?.valid || false,
     isLoading:
       loginMutation.isPending ||
-      registerMutation.isPending ||
-      isLicenseLoading,
+      registerMutation.isPending,
     isInitialized,
     login: loginMutation.mutateAsync,
     register: registerMutation.mutateAsync,

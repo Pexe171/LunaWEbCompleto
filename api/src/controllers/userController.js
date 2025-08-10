@@ -1,16 +1,16 @@
 const userService = require('../services/userService');
 
 const getMe = (req, res) => {
-  const { email, licenseExpiresAt, role, name, bio } = req.user;
-  res.json({ email, licenseExpiresAt, role, name, bio });
+  const { email, role, name, bio } = req.user;
+  res.json({ email, role, name, bio });
 };
 
 const updateMe = async (req, res, next) => {
   try {
     const { name, bio } = req.body;
     const updatedUser = await userService.updateUser(req.user._id, { name, bio });
-    const { email, licenseExpiresAt, role } = updatedUser;
-    res.json({ email, licenseExpiresAt, role, name: updatedUser.name, bio: updatedUser.bio });
+    const { email, role } = updatedUser;
+    res.json({ email, role, name: updatedUser.name, bio: updatedUser.bio });
   } catch (err) {
     next(err);
   }
