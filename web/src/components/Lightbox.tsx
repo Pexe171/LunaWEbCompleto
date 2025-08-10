@@ -14,7 +14,7 @@ interface LightboxProps {
 export default function Lightbox({ isOpen, onClose, image }: LightboxProps) {
   const imageUrl = image.url || `${process.env.NEXT_PUBLIC_DRIVE_EMBED_PREFIX}${image.fileId}`;
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="p-4 border-none bg-background flex flex-col items-center">
         <NextImage
           src={imageUrl}

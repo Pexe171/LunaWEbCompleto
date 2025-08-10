@@ -17,8 +17,11 @@ interface GalleryResponse {
 export default function Home() {
   const [search, setSearch] = useState("");
   const { data, isLoading, isError } = useQuery<GalleryResponse>({
-    queryKey: ['gallery', search],
-    queryFn: () => api.get(`/gallery?search=${search}`).then(res => res.data),
+    queryKey: ["gallery", search],
+    queryFn: () =>
+      api
+        .get("/gallery", { params: { search } })
+        .then((res) => res.data),
   });
 
   if (isLoading) return <div>Carregando galeria...</div>;
