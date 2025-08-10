@@ -16,7 +16,8 @@ const login = async (email, password) => {
         refreshToken,
         user: {
             email: user.email,
-            licenseExpiresAt: user.licenseExpiresAt
+            licenseExpiresAt: user.licenseExpiresAt,
+            role: user.role
         }
     };
 };

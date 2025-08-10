@@ -5,6 +5,7 @@ import { UseMutateAsyncFunction } from "@tanstack/react-query";
 export interface User {
   email: string;
   licenseExpiresAt: string;
+  role: 'user' | 'admin';
 }
 
 export type LoginData = z.infer<typeof loginSchema>;
