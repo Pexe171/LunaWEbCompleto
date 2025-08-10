@@ -1,9 +1,37 @@
 import axios from "axios";
 import { getRefreshToken, setAccessToken, setRefreshToken } from "./auth";
 
+function resolveBaseURL() {
+  const envURL = process.env.NEXT_PUBLIC_API_URL;
+  if (envURL) {
+    // Quando a aplicação estiver rodando localmente, o host 'api' não é resolvido.
+    if (typeof window !== "undefined") {
+      const { hostname } = window.location;
+      if (
+        (hostname === "localhost" || hostname === "127.0.0.1") &&
+        envURL.includes("api:3333")
+      ) {
+        return "http://localhost:3333/api/v1";
+      }
+    }
+    return envURL;
+  }
+
+  // Fallback padrão baseado no ambiente de execução
+  if (typeof window !== "undefined") {
+    const { hostname } = window.location;
+    if (hostname && hostname !== "localhost" && hostname !== "127.0.0.1") {
+      return "http://api:3333/api/v1";
+    }
+  }
+
+  return "http://localhost:3333/api/v1";
+}
+
+const BASE_URL = resolveBaseURL();
+
 const api = axios.create({
-  // Usa uma URL padrão caso a variável de ambiente não esteja definida
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333/api/v1",
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -33,7 +61,7 @@ api.interceptors.response.use(
       try {
         const refreshToken = getRefreshToken();
         if (refreshToken) {
-          const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`, { refreshToken });
+          const res = await axios.post(`${BASE_URL}/auth/refresh-token`, { refreshToken });
           const newAccessToken = res.data.accessToken;
           const newRefreshToken = res.data.refreshToken;
           setAccessToken(newAccessToken);
