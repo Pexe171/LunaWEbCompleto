@@ -1,0 +1,9 @@
+.profile-header{display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:var(--space-8);gap:var(--space-4);}
+.profile-header .avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;}
+.profile-header .stats{display:flex;gap:var(--space-4);color:var(--secondary);}
+.edit-form{display:flex;flex-direction:column;gap:var(--space-4);width:100%;max-width:320px;margin-top:var(--space-6);}
+.edit-form input,.edit-form textarea{width:100%;padding:.5rem .75rem;border:1px solid var(--secondary);border-radius:var(--radius-md);}
+.edit-form button{align-self:center;}
+.masonry{margin-top:var(--space-8);column-gap:var(--space-6);}
+@media(min-width:480px){.masonry{column-count:2;}}
+@media(min-width:768px){.masonry{column-count:3;}}

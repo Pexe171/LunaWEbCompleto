@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="/public/css/base.css">
   <link rel="stylesheet" href="/public/css/layout.css">
   <link rel="stylesheet" href="/public/css/components.css">
-  <link rel="stylesheet" href="/public/css/pages/home.css">
-  <title>Galeria Pexe</title>
+  <link rel="stylesheet" href="/public/css/pages/profile.css">
+  <title>Perfil - Galeria Pexe</title>
 </head>
 <body>
 <header class="site-header" role="banner">
@@ -28,19 +28,22 @@
   </div>
 </header>
 
-<section class="filters container" aria-label="Filtros da galeria">
-  <div class="chips" role="listbox" aria-multiselectable="true">
-    <button class="chip is-active" aria-pressed="true">Tudo</button>
-    <button class="chip">Retrato</button>
-    <button class="chip">Paisagem</button>
-    <button class="chip">Concept</button>
-  </div>
-  <div class="search">
-    <input type="search" placeholder="Buscar por título, artista ou tag" aria-label="Buscar">
-  </div>
-</section>
-
-<main class="container">
+<main class="container profile">
+  <section class="profile-header">
+    <img class="avatar" src="/public/assets/img/artist.svg" alt="Avatar de Ana Souza">
+    <h1 class="title">Ana Souza</h1>
+    <p class="bio">Artista de retratos digitais.</p>
+    <div class="stats"><span><strong id="count">0</strong> obras</span></div>
+    <form class="edit-form" aria-label="Editar perfil">
+      <label>Nome
+        <input type="text" value="Ana Souza" required aria-required="true" />
+      </label>
+      <label>Bio
+        <textarea rows="3">Artista de retratos digitais.</textarea>
+      </label>
+      <button class="btn btn-primary" type="submit">Salvar</button>
+    </form>
+  </section>
   <div class="masonry" style="opacity:0"></div>
   <div class="loader" hidden>
     <svg class="pencil" viewBox="0 0 24 24"><path d="M2 22l1-5 14-14 4 4-14 14-5 1z" fill="var(--secondary)"/></svg>
@@ -48,6 +51,6 @@
   </div>
 </main>
 
-<script type="module" src="/public/js/app.js"></script>
+<script type="module" src="/public/js/profile.js"></script>
 </body>
 </html>
