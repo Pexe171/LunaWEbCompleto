@@ -22,7 +22,31 @@ const getGalleryController = async (req, res, next) => {
 
 const createGalleryController = async (req, res, next) => {
     try {
-        const newImage = await galleryService.createGalleryImage(req.body);
+        const imageFile = req.files && req.files.image ? req.files.image[0] : null;
+        if (!imageFile) {
+            return res.status(400).json({ message: 'Imagem é obrigatória.' });
+        }
+
+        const videoFile = req.files && req.files.video ? req.files.video[0] : null;
+        const tags = req.body.tags
+            ? req.body.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
+            : [];
+
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        const imageUrl = `${baseUrl}/uploads/images/${imageFile.filename}`;
+        const data = {
+            title: req.body.title,
+        };
+
+        data.url = imageUrl;
+        if (videoFile) {
+            data.videoUrl = `${baseUrl}/uploads/videos/${videoFile.filename}`;
+        }
+        if (tags.length > 0) {
+            data.tags = tags;
+        }
+
+        const newImage = await galleryService.createGalleryImage(data);
         res.status(201).json(newImage);
     } catch (err) {
         next(err);
