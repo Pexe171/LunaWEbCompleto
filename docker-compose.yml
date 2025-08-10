@@ -29,7 +29,6 @@ services:
       - mongo
     volumes:
       - ./api:/app
-      - /app/node_modules
     restart: always
 
   web:
@@ -43,7 +42,6 @@ services:
       - api
     volumes:
       - ./web:/app
-      - /app/node_modules
     restart: always
 
 volumes:
