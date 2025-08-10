@@ -8,7 +8,14 @@ const createGalleryImage = async (imageData) => {
 };
 
 const getGalleryImages = async (filters) => {
-    const { tags, search, technique, artist, date, page = 1, limit = 10 } = filters;
+    let { tags, search, technique, artist, date, page = 1, limit = 10 } = filters;
+
+    // Ensure page and limit are valid positive integers
+    page = parseInt(page, 10);
+    limit = parseInt(limit, 10);
+    if (isNaN(page) || page < 1) page = 1;
+    if (isNaN(limit) || limit < 1) limit = 10;
+
     const query = {};
 
     if (tags && tags.length > 0) {
