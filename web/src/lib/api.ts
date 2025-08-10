@@ -34,7 +34,9 @@ const api = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    "Cache-Control": "no-cache",
   },
+  validateStatus: (status) => (status >= 200 && status < 300) || status === 304,
 });
 
 api.interceptors.request.use(
@@ -52,6 +54,9 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => {
+    if (response.status === 304) {
+      return { ...response, data: null };
+    }
     return response;
   },
   async (error) => {

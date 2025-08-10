@@ -87,6 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     queryKey: ['license'],
     queryFn: () => api.get('/license/verify-license').then(res => res.data),
     enabled: !!accessToken,
+    retry: false,
     refetchInterval: 60 * 1000 * 5 // Refreshes license status every 5 minutes
   });
 
