@@ -5,6 +5,11 @@ const galleryRoutes = require('./galleryRoutes');
 
 const apiRouter = express.Router();
 
+// Rota simples para verificar se a API está respondendo
+apiRouter.get('/health', (req, res) => {
+    res.json({ status: 'ok' });
+});
+
 apiRouter.use('/auth', authRoutes);
 apiRouter.use('/license', licenseRoutes);
 apiRouter.use('/gallery', galleryRoutes);
