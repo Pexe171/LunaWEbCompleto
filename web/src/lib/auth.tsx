@@ -1,11 +1,10 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useState, useEffect, ReactNode } from 'react';
 import { api } from './api';
 import { User, AuthContextType, LoginData, RegisterData } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/components/ui/use-toast';
-import { useRouter } from 'next/navigation';
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -27,7 +26,6 @@ export const getRefreshToken = () => {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const { toast } = useToast();
 
   const [accessToken, setLocalAccessToken] = useState<string | null>(null);
@@ -48,42 +46,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLocalAccessToken(res.data.accessToken);
       setLocalRefreshToken(res.data.refreshToken);
       queryClient.setQueryData(['auth'], { user: res.data.user });
-    },
-  });
-
-  const loginGoogleMutation = useMutation({
-    mutationFn: (token: string) => api.post('/auth/google', { token }),
-    onSuccess: (res) => {
-      setAccessToken(res.data.accessToken);
-      setRefreshToken(res.data.refreshToken);
-      setLocalAccessToken(res.data.accessToken);
-      setLocalRefreshToken(res.data.refreshToken);
-      queryClient.setQueryData(['auth'], { user: res.data.user });
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Erro de Login",
-        description: error.response?.data?.message || "Falha ao entrar com Google.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const loginFacebookMutation = useMutation({
-    mutationFn: (token: string) => api.post('/auth/facebook', { token }),
-    onSuccess: (res) => {
-      setAccessToken(res.data.accessToken);
-      setRefreshToken(res.data.refreshToken);
-      setLocalAccessToken(res.data.accessToken);
-      setLocalRefreshToken(res.data.refreshToken);
-      queryClient.setQueryData(['auth'], { user: res.data.user });
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Erro de Login",
-        description: error.response?.data?.message || "Falha ao entrar com Facebook.",
-        variant: "destructive",
-      });
     },
   });
 
@@ -133,13 +95,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isLoading:
       loginMutation.isPending ||
       registerMutation.isPending ||
-      loginGoogleMutation.isPending ||
-      loginFacebookMutation.isPending ||
       isLicenseLoading,
     login: loginMutation.mutateAsync,
     register: registerMutation.mutateAsync,
-    loginWithGoogle: loginGoogleMutation.mutateAsync,
-    loginWithFacebook: loginFacebookMutation.mutateAsync,
     logout: logoutMutation.mutateAsync,
   };
 
