@@ -17,13 +17,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 import { imageSchema } from "@/lib/validators";
 
 export default function UploadPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof imageSchema>>({
     resolver: zodResolver(imageSchema),
@@ -36,19 +37,23 @@ export default function UploadPage() {
 
   const uploadMutation = useMutation({
     mutationFn: (data: z.infer<typeof imageSchema>) => {
-      const tagsArray = data.tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+      const tagsArray = (data.tags ?? "")
+        .split(',')
+        .map(tag => tag.trim())
+        .filter(tag => tag);
       return api.post('/gallery', { ...data, tags: tagsArray });
     },
     onSuccess: () => {
       toast({
         title: "Sucesso!",
         description: "Imagem carregada com sucesso.",
+        variant: "default",
       });
       queryClient.invalidateQueries({ queryKey: ['gallery'] });
       form.reset();
       router.push('/');
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Erro ao carregar imagem",
         description: error.response?.data?.message || "Ocorreu um erro.",

@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { api } from './api';
 import { User, AuthContextType, LoginData, RegisterData } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,6 +28,7 @@ export const getRefreshToken = () => {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { toast } = useToast();
 
   const [accessToken, setLocalAccessToken] = useState<string | null>(null);
   const [refreshToken, setLocalRefreshToken] = useState<string | null>(null);
@@ -48,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLocalRefreshToken(res.data.refreshToken);
       queryClient.setQueryData(['auth'], { user: res.data.user });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Erro de Login",
         description: error.response?.data?.message || "Credenciais inválidas.",
@@ -63,10 +64,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       toast({
         title: "Cadastro efetuado",
         description: "Sua conta foi criada. Faça login para continuar.",
+        variant: "default",
       });
       router.push('/login');
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Erro no Cadastro",
         description: error.response?.data?.message || "Ocorreu um erro no cadastro.",
@@ -76,12 +78,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   const logoutMutation = useMutation({
-    mutationFn: () => {
+    mutationFn: async () => {
       const token = getRefreshToken();
       if (token) {
-        return api.post('/auth/logout', { refreshToken: token });
+        await api.post('/auth/logout', { refreshToken: token });
       }
-      return Promise.resolve();
     },
     onSuccess: () => {
       localStorage.removeItem('accessToken');
@@ -94,6 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       toast({
         title: "Erro ao fazer logout",
         description: "Não foi possível invalidar a sessão no servidor, mas você foi desconectado localmente.",
+        variant: "destructive",
       });
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');

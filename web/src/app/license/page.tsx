@@ -35,7 +35,8 @@ export default function LicensePage() {
     );
   }
 
-  const isLicenseValid = user && new Date(user.licenseExpiresAt) > new Date();
+  const isLicenseValid =
+    user?.licenseExpiresAt ? new Date(user.licenseExpiresAt) > new Date() : false;
 
   return (
     <div className="flex justify-center mt-10">
@@ -54,7 +55,9 @@ export default function LicensePage() {
           <p>
             Válida até:{" "}
             <span className="font-bold">
-              {format(new Date(user?.licenseExpiresAt), "dd/MM/yyyy")}
+              {user?.licenseExpiresAt
+                ? format(new Date(user.licenseExpiresAt), "dd/MM/yyyy")
+                : ""}
             </span>
           </p>
           <Button
