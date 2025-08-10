@@ -17,7 +17,9 @@ const login = async (email, password) => {
         user: {
             email: user.email,
             licenseExpiresAt: user.licenseExpiresAt,
-            role: user.role
+            role: user.role,
+            name: user.name,
+            bio: user.bio
         }
     };
 };

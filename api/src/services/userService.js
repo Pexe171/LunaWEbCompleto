@@ -22,4 +22,22 @@ const createUser = async (
   return newUser;
 };
 
-module.exports = { createUser };
+const getUserById = async (id) => {
+  return User.findById(id);
+};
+
+const updateUser = async (id, data) => {
+  return User.findByIdAndUpdate(id, data, { new: true });
+};
+
+const changePassword = async (id, currentPassword, newPassword) => {
+  const user = await User.findById(id);
+  if (!user || !(await user.comparePassword(currentPassword))) {
+    throw new Error('Senha atual incorreta.');
+  }
+  user.password = newPassword;
+  await user.save();
+  return user;
+};
+
+module.exports = { createUser, getUserById, updateUser, changePassword };

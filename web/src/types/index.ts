@@ -6,6 +6,8 @@ export interface User {
   email: string;
   licenseExpiresAt: string;
   role: 'user' | 'admin';
+  name?: string;
+  bio?: string;
 }
 
 export type LoginData = z.infer<typeof loginSchema>;
