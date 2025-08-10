@@ -40,7 +40,7 @@ const FormLabel = React.forwardRef<
   React.ElementRef<typeof Label>,
   React.ComponentPropsWithoutRef<typeof Label>
 >(({ className, ...props }, ref) => {
-  const { error, formItemId } = useFormContext();
+  const { error, formItemId } = useFormField();
 
   return (
     <Label
@@ -57,16 +57,19 @@ const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
   React.ComponentPropsWithoutRef<typeof Slot>
 >(({ ...props }, ref) => {
-  const { formItemId, formDescriptionId, formMessageId } = React.useContext(FormItemContext);
-  const { field, fieldState: { error } } = useFormContext();
+  const { error, formItemId, formDescriptionId, formMessageId } =
+    useFormField();
 
   return (
     <Slot
       ref={ref}
       id={formItemId}
-      aria-describedby={!error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`}
+      aria-describedby={
+        !error
+          ? formDescriptionId
+          : `${formDescriptionId} ${formMessageId}`
+      }
       aria-invalid={!!error}
-      {...field}
       {...props}
     />
   );
@@ -77,7 +80,7 @@ const FormDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
-  const { formDescriptionId } = React.useContext(FormItemContext);
+  const { formDescriptionId } = useFormField();
 
   return (
     <p
@@ -94,8 +97,7 @@ const FormMessage = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
-  const { formMessageId } = React.useContext(FormItemContext);
-  const { error } = useFormContext();
+  const { error, formMessageId } = useFormField();
   const body = error ? String(error.message) : children;
 
   if (!body) {
@@ -122,7 +124,9 @@ type FormFieldContextValue<
   name: TName;
 };
 
-const FormFieldContext = React.createContext<FormFieldContextValue>({} as FormFieldContextValue);
+const FormFieldContext = React.createContext<FormFieldContextValue>(
+  {} as FormFieldContextValue
+);
 
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
@@ -138,23 +142,26 @@ const FormField = <
 };
 FormField.displayName = "FormField";
 
-const useFormContext = () => {
-    const context = React.useContext(FormFieldContext);
-    const { field, fieldState, formState } = useFormContext(context.name);
-    
-    return {
-        ...field,
-        formState,
-        fieldState,
-        formItemId: React.useContext(FormItemContext).id,
-        formDescriptionId: `${React.useContext(FormItemContext).id}-form-item-description`,
-        formMessageId: `${React.useContext(FormItemContext).id}-form-item-message`,
-        error: fieldState.error,
-    };
-};
+function useFormField() {
+  const fieldContext = React.useContext(FormFieldContext);
+  const itemContext = React.useContext(FormItemContext);
+  const { getFieldState, formState } = useFormContext();
+
+  const fieldState = getFieldState(fieldContext.name, formState);
+
+  const id = itemContext.id;
+
+  return {
+    id,
+    name: fieldContext.name,
+    formItemId: `${id}-form-item`,
+    formDescriptionId: `${id}-form-item-description`,
+    formMessageId: `${id}-form-item-message`,
+    ...fieldState,
+  };
+}
 
 export {
-  useFormContext as useFormField,
   Form,
   FormItem,
   FormLabel,
@@ -162,4 +169,6 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  useFormField,
 };
+
