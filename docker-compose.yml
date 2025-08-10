@@ -23,7 +23,7 @@ services:
       - LICENSE_DAYS=30
       - NODE_ENV=development
       - LOG_LEVEL=info
-    command: sh -c "nodemon src/server.js"
+    command: npm run dev
     depends_on:
       - mongo
     volumes:
