@@ -7,6 +7,10 @@ export function cn(...inputs: ClassValue[]) {
 
 export function resolveAssetUrl(pathname: string) {
   if (!pathname) return "";
+  // Prevent double-prefixing when an absolute URL is provided
+  if (/^https?:\/\//.test(pathname)) {
+    return pathname;
+  }
   const isServer = typeof window === "undefined";
   const internal =
     process.env.ASSET_BASE_URL_INTERNAL ||
