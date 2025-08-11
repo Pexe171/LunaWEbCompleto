@@ -1,6 +1,11 @@
 "use client";
 
-import { Dialog, DialogContent } from "./ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "./ui/dialog";
 import NextImage from "next/image";
 import { Image as ImageType } from "@/types";
 import LikeButton from "./LikeButton";
@@ -17,6 +22,10 @@ export default function Lightbox({ isOpen, onClose, image }: LightboxProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="p-0 border-none bg-transparent sm:max-w-3xl">
+        <DialogTitle className="sr-only">{image.title}</DialogTitle>
+        <DialogDescription className="sr-only">
+          {image.description || "Image preview"}
+        </DialogDescription>
         <div className="relative">
           <NextImage
             src={imageUrl}
