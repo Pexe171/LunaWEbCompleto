@@ -6,13 +6,13 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'localhost',
         port: '3333',
-        pathname: '/uploads/images/**',
+        pathname: '/uploads/**',
       },
       {
         protocol: 'http',
         hostname: 'api',
         port: '3333',
-        pathname: '/uploads/images/**',
+        pathname: '/uploads/**',
       },
       {
         protocol: 'https',
@@ -25,6 +25,14 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/uploads/:path*',
+        destination: 'http://api:3333/uploads/:path*',
+      },
+    ];
   },
 };
 

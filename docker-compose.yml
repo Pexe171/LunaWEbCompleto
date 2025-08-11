@@ -37,7 +37,8 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://api:3333/api/v1
-      - NEXT_PUBLIC_ASSET_BASE_URL=http://api:3333
+      - NEXT_PUBLIC_ASSET_BASE_URL=http://localhost:3333   # usado pelo browser
+      - ASSET_BASE_URL_INTERNAL=http://api:3333            # usado pelo SSR/Next
     depends_on:
       - api
     volumes:

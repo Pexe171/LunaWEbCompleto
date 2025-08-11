@@ -5,14 +5,17 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function resolveAssetUrl(path: string): string {
-  const base = process.env.NEXT_PUBLIC_ASSET_BASE_URL;
-  if (!path) return "";
-  if (path.startsWith("http://") || path.startsWith("https://")) {
-    return path;
-  }
-  const prefix = base ?? "";
-  const separator = path.startsWith("/") ? "" : "/";
-  return `${prefix}${separator}${path}`;
+export function resolveAssetUrl(pathname: string) {
+  if (!pathname) return "";
+  const isServer = typeof window === "undefined";
+  const internal =
+    process.env.ASSET_BASE_URL_INTERNAL ||
+    process.env.NEXT_PUBLIC_ASSET_BASE_URL || // fallback
+    "http://api:3333";
+  const publicBase =
+    process.env.NEXT_PUBLIC_ASSET_BASE_URL ||
+    "http://localhost:3333";
+  const base = isServer ? internal : publicBase;
+  return `${base}${pathname.startsWith("/") ? "" : "/"}${pathname}`;
 }
     
