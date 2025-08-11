@@ -42,10 +42,26 @@ const getGalleryImages = async (filters) => {
     const images = await Image.find(query)
         .skip((page - 1) * limit)
         .limit(limit)
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: -1 })
+        .lean();
+
+    const imageIds = images.map(img => img._id);
+    const likeCounts = await Like.aggregate([
+        { $match: { imageId: { $in: imageIds } } },
+        { $group: { _id: "$imageId", count: { $sum: 1 } } }
+    ]);
+    const likeMap = {};
+    likeCounts.forEach(item => {
+        likeMap[item._id.toString()] = item.count;
+    });
+
+    const imagesWithLikes = images.map(img => ({
+        ...img,
+        likes: likeMap[img._id.toString()] || 0
+    }));
 
     return {
-        images,
+        images: imagesWithLikes,
         totalCount,
         totalPages: Math.ceil(totalCount / limit),
         currentPage: page

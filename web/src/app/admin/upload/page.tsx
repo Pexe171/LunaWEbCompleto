@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 import { imageSchema } from "@/lib/validators";
@@ -32,6 +33,7 @@ export default function UploadPage() {
       title: "",
       url: "",
       tags: "",
+      description: "",
     },
   });
 
@@ -41,6 +43,7 @@ export default function UploadPage() {
         title: data.title,
         url: data.url,
         tags: data.tags ?? '',
+        description: data.description ?? '',
       });
     },
     onSuccess: () => {
@@ -107,6 +110,19 @@ export default function UploadPage() {
                   <Input placeholder="ex: natureza, cidade, arte (separadas por vírgula)" {...field} />
                 </FormControl>
                 <FormDescription>Separe as tags por vírgula.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Descrição</FormLabel>
+                <FormControl>
+                  <Textarea rows={5} placeholder="Conte a história desta imagem" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

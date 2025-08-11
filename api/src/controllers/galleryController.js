@@ -29,6 +29,9 @@ const createGalleryController = async (req, res, next) => {
             title: req.body.title,
             url: req.body.url,
         };
+        if (req.body.description) {
+            data.description = req.body.description;
+        }
         if (tags.length > 0) {
             data.tags = tags;
         }

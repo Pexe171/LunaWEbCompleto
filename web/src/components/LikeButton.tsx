@@ -6,26 +6,29 @@ import { Heart } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useToast } from "./ui/use-toast";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface LikeButtonProps {
   imageId: string;
+  initialCount?: number;
 }
 
-export default function LikeButton({ imageId }: LikeButtonProps) {
+export default function LikeButton({ imageId, initialCount = 0 }: LikeButtonProps) {
   const { isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const [liked, setLiked] = useState(false);
+  const [count, setCount] = useState(initialCount);
 
-  // Implementação otimista de likes. Você precisaria de um endpoint para likes/unlikes.
-  // Aqui, apenas um mock para demonstrar a interação.
   const likeMutation = useMutation({
     mutationFn: () => api.post(`/gallery/${imageId}/like`),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['gallery'] });
+      setCount((c) => c + 1);
+      queryClient.invalidateQueries({ queryKey: ["gallery"] });
       toast({
         title: "Sucesso!",
         description: "Imagem curtida com sucesso.",
-        variant: "default",
       });
     },
     onError: () => {
@@ -34,7 +37,15 @@ export default function LikeButton({ imageId }: LikeButtonProps) {
         description: "Você não tem permissão para curtir.",
         variant: "destructive",
       });
-    }
+    },
+  });
+
+  const unlikeMutation = useMutation({
+    mutationFn: () => api.delete(`/gallery/${imageId}/like`),
+    onSuccess: () => {
+      setCount((c) => Math.max(0, c - 1));
+      queryClient.invalidateQueries({ queryKey: ["gallery"] });
+    },
   });
 
   if (!isAuthenticated) {
@@ -43,17 +54,29 @@ export default function LikeButton({ imageId }: LikeButtonProps) {
 
   const handleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    likeMutation.mutate();
+    if (liked) {
+      unlikeMutation.mutate();
+    } else {
+      likeMutation.mutate();
+    }
+    setLiked(!liked);
   };
 
   return (
     <Button
       variant="ghost"
-      size="icon"
+      size="sm"
       onClick={handleLike}
-      className="bg-transparent hover:bg-soft/20"
+      className="bg-transparent hover:bg-soft/20 flex items-center gap-1"
     >
-      <Heart className="h-6 w-6 text-soft" />
+      <Heart
+        className={cn(
+          "h-6 w-6 transition-transform",
+          liked ? "text-red-500 fill-red-500 scale-110" : "text-soft"
+        )}
+        fill={liked ? "currentColor" : "none"}
+      />
+      <span className="text-soft text-sm">{count}</span>
     </Button>
   );
 }

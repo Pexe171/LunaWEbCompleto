@@ -22,7 +22,7 @@ export default function NavBar() {
       <div className="flex items-center space-x-4">
         {isAuthenticated && user?.role === 'admin' && (
           <Link href="/admin">
-            <Button variant="ghost">Dashboard</Button>
+            <Button variant="ghost">Admin</Button>
           </Link>
         )}
         {isAuthenticated && (

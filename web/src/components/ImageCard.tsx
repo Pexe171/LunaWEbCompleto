@@ -76,7 +76,7 @@ export default function ImageCard({ image }: ImageCardProps) {
                 <Trash className="h-6 w-6 text-soft" />
               </Button>
             )}
-            <LikeButton imageId={image._id} />
+            <LikeButton imageId={image._id} initialCount={image.likes || 0} />
           </div>
           <div className="text-background">
             <h3 className="font-semibold text-lg">{image.title}</h3>

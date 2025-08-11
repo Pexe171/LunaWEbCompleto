@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { Image } from "@/types";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface GalleryResponse {
   images: Image[];
@@ -42,7 +44,12 @@ export default function AdminDashboard() {
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-3xl font-bold">Dashboard do Admin</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Painel do Admin</h1>
+        <Link href="/">
+          <Button variant="outline">Voltar ao início</Button>
+        </Link>
+      </div>
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">

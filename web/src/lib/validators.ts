@@ -38,4 +38,5 @@ export const imageSchema = z.object({
     .string()
     .url({ message: "URL da imagem inválida." }),
   tags: z.string().optional(),
+  description: z.string().optional(),
 });

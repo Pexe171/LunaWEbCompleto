@@ -40,7 +40,7 @@ export default function Lightbox({ isOpen, onClose, image }: LightboxProps) {
             className="rounded-lg max-h-[80vh] w-auto h-auto object-contain"
           />
           <div className="absolute top-2 right-2 flex gap-2">
-            <LikeButton imageId={image._id} />
+            <LikeButton imageId={image._id} initialCount={image.likes || 0} />
             <ShareButton url={publicUrl} title={image.title} />
           </div>
         </div>
