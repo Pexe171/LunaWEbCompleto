@@ -10,8 +10,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {!isAdmin && <Header />}
-      <main className={isAdmin ? "min-h-screen" : "container mx-auto p-4 md:p-8"}>{children}</main>
+      <Header />
+      <main className={isAdmin ? "min-h-screen p-4" : "container mx-auto p-4 md:p-8"}>{children}</main>
       {!isAdmin && <Footer />}
     </>
   );
