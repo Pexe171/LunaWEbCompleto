@@ -10,6 +10,7 @@ import NextImage from "next/image";
 import { Image as ImageType } from "@/types";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
+import { resolveAssetUrl } from "@/lib/utils";
 
 interface LightboxProps {
   isOpen: boolean;
@@ -18,7 +19,9 @@ interface LightboxProps {
 }
 
 export default function Lightbox({ isOpen, onClose, image }: LightboxProps) {
-  const imageUrl = image.url || `${process.env.NEXT_PUBLIC_DRIVE_EMBED_PREFIX}${image.fileId}`;
+  const imageUrl =
+    (image.url && resolveAssetUrl(image.url)) ||
+    `${process.env.NEXT_PUBLIC_DRIVE_EMBED_PREFIX}${image.fileId}`;
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="p-0 border-none bg-transparent sm:max-w-3xl">

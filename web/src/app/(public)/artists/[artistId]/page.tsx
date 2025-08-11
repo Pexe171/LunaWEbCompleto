@@ -7,6 +7,7 @@ import { api } from "@/lib/api";
 import { Artist, Image as ImageType } from "@/types";
 import GalleryGrid from "@/components/GalleryGrid";
 import FollowButton from "@/components/FollowButton";
+import { resolveAssetUrl } from "@/lib/utils";
 
 export default function ArtistPage() {
   const params = useParams();
@@ -47,11 +48,13 @@ export default function ArtistPage() {
     return <div className="p-8">Artista não encontrado.</div>;
   }
 
+  const avatarUrl = resolveAssetUrl(artist.avatarUrl);
+
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-8">
       <div className="flex items-center gap-4">
         <Image
-          src={artist.avatarUrl}
+          src={avatarUrl}
           alt={artist.name}
           width={96}
           height={96}

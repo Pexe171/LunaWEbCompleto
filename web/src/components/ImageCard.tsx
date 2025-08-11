@@ -12,6 +12,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useToast } from "./ui/use-toast";
+import { resolveAssetUrl } from "@/lib/utils";
 
 interface ImageCardProps {
   image: ImageType;
@@ -38,7 +39,9 @@ export default function ImageCard({ image }: ImageCardProps) {
     },
   });
 
-  const imageUrl = image.url || `${process.env.NEXT_PUBLIC_DRIVE_EMBED_PREFIX}${image.fileId}`;
+  const imageUrl =
+    (image.url && resolveAssetUrl(image.url)) ||
+    `${process.env.NEXT_PUBLIC_DRIVE_EMBED_PREFIX}${image.fileId}`;
   const aspectRatio = image.width && image.height ? image.width / image.height : 1;
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -37,6 +37,7 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://api:3333/api/v1
+      - NEXT_PUBLIC_ASSET_BASE_URL=http://api:3333
     depends_on:
       - api
     volumes:
