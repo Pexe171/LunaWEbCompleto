@@ -21,7 +21,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex justify-center items-center h-[calc(100vh-8rem)]">
-      <AuthForm type="login" onSubmit={login} />
+      <AuthForm type="login" onSubmit={login} redirectTo="/" />
     </div>
   );
 }

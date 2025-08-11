@@ -31,9 +31,10 @@ type FormValues = LoginValues | RegisterValues;
 interface AuthFormProps {
   type: AuthFormType;
   onSubmit: (data: FormValues) => Promise<void>;
+  redirectTo?: string;
 }
 
-const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
+const AuthForm = ({ type, onSubmit, redirectTo }: AuthFormProps) => {
   const router = useRouter();
   const { toast } = useToast();
 
@@ -57,7 +58,9 @@ const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
             ? "Você foi autenticado com sucesso."
             : "Sua conta foi criada. Faça login para continuar.",
       });
-      router.push(type === "login" ? "/" : "/login");
+      if (redirectTo !== undefined) {
+        router.push(redirectTo);
+      }
     },
     onError: (error: any) => {
       console.error(error);
