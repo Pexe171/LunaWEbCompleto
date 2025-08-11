@@ -40,7 +40,7 @@ export default function ImageCard({ image }: ImageCardProps) {
   });
 
   const imageUrl =
-    (image.url && resolveAssetUrl(image.url)) ||
+    (image.url && resolveAssetUrl(image.url, { internal: true })) ||
     `${process.env.NEXT_PUBLIC_DRIVE_EMBED_PREFIX}${image.fileId}`;
   const aspectRatio = image.width && image.height ? image.width / image.height : 1;
 
