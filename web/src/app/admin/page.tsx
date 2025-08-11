@@ -31,6 +31,14 @@ export default function AdminDashboard() {
   const totalPublications = allData?.totalCount || 0;
   const newUploads = todayData?.totalCount || 0;
 
+  const { data: userCount } = useQuery({
+    queryKey: ["user-count"],
+    queryFn: async () => {
+      const res = await api.get("/users/count");
+      return res.data.count as number;
+    },
+  });
+
   const tagCounts: Record<string, number> = {};
   allData?.images.forEach((img) => {
     (img.tags || []).forEach((tag) => {
@@ -72,7 +80,7 @@ export default function AdminDashboard() {
             <CardTitle>Usuários Registrados</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">0</div>
+            <div className="text-2xl font-bold">{userCount ?? 0}</div>
           </CardContent>
         </Card>
         <Card>
