@@ -26,4 +26,13 @@ const changePassword = async (req, res, next) => {
   }
 };
 
-module.exports = { getMe, updateMe, changePassword };
+const getUsersCount = async (req, res, next) => {
+  try {
+    const count = await userService.countUsers();
+    res.json({ count });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getMe, updateMe, changePassword, getUsersCount };
