@@ -35,4 +35,8 @@ const changePassword = async (id, currentPassword, newPassword) => {
   return user;
 };
 
-module.exports = { createUser, getUserById, updateUser, changePassword };
+const countUsers = async () => {
+  return User.countDocuments();
+};
+
+module.exports = { createUser, getUserById, updateUser, changePassword, countUsers };

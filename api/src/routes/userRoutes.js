@@ -1,11 +1,12 @@
 const express = require('express');
 const { body } = require('express-validator');
-const { getMe, updateMe, changePassword } = require('../controllers/userController');
+const { getMe, updateMe, changePassword, getUsersCount } = require('../controllers/userController');
 const { authMiddleware } = require('../middlewares/auth');
 const { validate } = require('../middlewares/validate');
 
 const router = express.Router();
 
+router.get('/count', getUsersCount);
 router.get('/me', authMiddleware, getMe);
 
 router.put('/me',
