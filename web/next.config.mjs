@@ -9,6 +9,12 @@ const nextConfig = {
         pathname: '/uploads/images/**',
       },
       {
+        protocol: 'http',
+        hostname: 'api',
+        port: '3333',
+        pathname: '/uploads/images/**',
+      },
+      {
         protocol: 'https',
         hostname: 'drive.google.com',
         pathname: '/**',
