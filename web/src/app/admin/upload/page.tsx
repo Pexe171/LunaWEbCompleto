@@ -30,25 +30,17 @@ export default function UploadPage() {
     resolver: zodResolver(imageSchema),
     defaultValues: {
       title: "",
-      image: undefined,
-      video: undefined,
+      url: "",
       tags: "",
     },
   });
 
   const uploadMutation = useMutation({
     mutationFn: (data: z.infer<typeof imageSchema>) => {
-      const formData = new FormData();
-      formData.append('title', data.title);
-      formData.append('tags', data.tags ?? '');
-      if (data.image && data.image.length > 0) {
-        formData.append('image', data.image[0]);
-      }
-      if (data.video && data.video.length > 0) {
-        formData.append('video', data.video[0]);
-      }
-      return api.post('/gallery', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      return api.post('/gallery', {
+        title: data.title,
+        url: data.url,
+        tags: data.tags ?? '',
       });
     },
     onSuccess: () => {
@@ -94,29 +86,12 @@ export default function UploadPage() {
           />
           <FormField
             control={form.control}
-            name="image"
+            name="url"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Imagem</FormLabel>
+                <FormLabel>URL da Imagem</FormLabel>
                 <FormControl>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => field.onChange(e.target.files)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="video"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Vídeo (opcional)</FormLabel>
-                <FormControl>
-                  <Input type="file" accept="video/*" onChange={(e) => field.onChange(e.target.files)} />
+                  <Input placeholder="https://exemplo.com/imagem.jpg" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

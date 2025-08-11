@@ -34,20 +34,8 @@ export const passwordSchema = z.object({
 
 export const imageSchema = z.object({
   title: z.string().min(1, { message: "Título é obrigatório." }),
-  image: z
-    .any()
-    .refine((file) => file && file.length > 0, {
-      message: "Imagem é obrigatória.",
-    })
-    .refine(
-      (file) =>
-        file &&
-        file[0] &&
-        file[0].type.startsWith("image/"),
-      {
-        message: "Apenas arquivos de imagem são permitidos.",
-      }
-    ),
-  video: z.any().optional(),
+  url: z
+    .string()
+    .url({ message: "URL da imagem inválida." }),
   tags: z.string().optional(),
 });
