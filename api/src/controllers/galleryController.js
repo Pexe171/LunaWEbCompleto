@@ -34,7 +34,8 @@ const createGalleryController = async (req, res, next) => {
             : [];
 
         const baseUrl = `${req.protocol}://${req.get('host')}`;
-        const imageUrl = `${baseUrl}/uploads/images/${imageFile.filename}`;
+        const folderName = req.savedImageFolder || '';
+        const imageUrl = `${baseUrl}/uploads/images/${folderName}/${imageFile.filename}`;
         const data = {
             title: req.body.title,
         };
@@ -84,9 +85,20 @@ const deleteGalleryController = async (req, res, next) => {
         }
 
         if (deletedImage.url) {
-            const imageFile = path.basename(deletedImage.url);
-            const imagePath = path.join(__dirname, '..', '..', 'uploads', 'images', imageFile);
-            fs.unlink(imagePath, () => {});
+            try {
+                const imageUrlPath = new URL(deletedImage.url).pathname; // /uploads/images/<folder>/<file>
+                const imagePath = path.join(__dirname, '..', '..', imageUrlPath);
+                fs.unlink(imagePath, () => {
+                    const dir = path.dirname(imagePath);
+                    fs.readdir(dir, (err, files) => {
+                        if (!err && files.length === 0) {
+                            fs.rmdir(dir, () => {});
+                        }
+                    });
+                });
+            } catch (err) {
+                // ignore errors during file cleanup
+            }
         }
         if (deletedImage.videoUrl) {
             const videoFile = path.basename(deletedImage.videoUrl);
