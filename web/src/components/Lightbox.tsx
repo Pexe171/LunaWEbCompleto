@@ -19,9 +19,11 @@ interface LightboxProps {
 }
 
 export default function Lightbox({ isOpen, onClose, image }: LightboxProps) {
-  const imageUrl =
+  const publicUrl =
     (image.url && resolveAssetUrl(image.url)) ||
     `${process.env.NEXT_PUBLIC_DRIVE_EMBED_PREFIX}${image.fileId}`;
+  const internalUrl =
+    (image.url && resolveAssetUrl(image.url, { internal: true })) || publicUrl;
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="p-0 border-none bg-transparent sm:max-w-3xl">
@@ -31,7 +33,7 @@ export default function Lightbox({ isOpen, onClose, image }: LightboxProps) {
         </DialogDescription>
         <div className="relative">
           <NextImage
-            src={imageUrl}
+            src={internalUrl}
             alt={image.title}
             width={image.width || 1200}
             height={image.height || 800}
@@ -39,7 +41,7 @@ export default function Lightbox({ isOpen, onClose, image }: LightboxProps) {
           />
           <div className="absolute top-2 right-2 flex gap-2">
             <LikeButton imageId={image._id} />
-            <ShareButton url={imageUrl} title={image.title} />
+            <ShareButton url={publicUrl} title={image.title} />
           </div>
         </div>
         <div className="p-4 bg-background text-foreground">

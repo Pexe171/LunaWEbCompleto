@@ -5,21 +5,30 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function resolveAssetUrl(pathname: string) {
+type ResolveAssetOptions = {
+  /**
+   * When `true`, uses the internal base URL intended for server side
+   * requests (e.g. when running inside Docker containers).
+   * Defaults to `false` which returns the public base URL used by the
+   * browser.
+   */
+  internal?: boolean;
+};
+
+export function resolveAssetUrl(pathname: string, opts: ResolveAssetOptions = {}) {
   if (!pathname) return "";
   // Prevent double-prefixing when an absolute URL is provided
   if (/^https?:\/\//.test(pathname)) {
     return pathname;
   }
-  const isServer = typeof window === "undefined";
-  const internal =
+  const internalBase =
     process.env.ASSET_BASE_URL_INTERNAL ||
     process.env.NEXT_PUBLIC_ASSET_BASE_URL || // fallback
     "http://api:3333";
   const publicBase =
     process.env.NEXT_PUBLIC_ASSET_BASE_URL ||
     "http://localhost:3333";
-  const base = isServer ? internal : publicBase;
+  const base = opts.internal ? internalBase : publicBase;
   return `${base}${pathname.startsWith("/") ? "" : "/"}${pathname}`;
 }
     
