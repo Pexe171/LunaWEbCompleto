@@ -15,13 +15,13 @@ export default function LoginPage() {
     queryKey: ["user-count"],
     queryFn: async () => {
       const res = await api.get("/users/count");
-      return res.data.count;
+      return res.data.count as number;
     },
   });
 
   useEffect(() => {
     if (isInitialized && isAuthenticated) {
-      router.push('/');
+      router.push("/");
     }
   }, [isAuthenticated, isInitialized, router]);
 
@@ -31,7 +31,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col justify-center items-center h-[calc(100vh-8rem)]">
-      <AuthForm type="login" onSubmit={login} redirectTo="/" />
+      <AuthForm type="login" onSubmit={login} />
       <p className="mt-4 text-center text-sm text-gray-500">
         <span className="block">Usuários Registrados</span>
         <span className="text-lg font-semibold">{userCount ?? 0}</span>
