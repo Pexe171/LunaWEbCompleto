@@ -1,6 +1,4 @@
 const galleryService = require('../services/galleryService');
-const fs = require('fs');
-const path = require('path');
 
 const getGalleryController = async (req, res, next) => {
     try {
@@ -23,28 +21,25 @@ const getGalleryController = async (req, res, next) => {
 
 const createGalleryController = async (req, res, next) => {
     try {
-        const imageFile = req.files && req.files.image ? req.files.image[0] : null;
-        if (!imageFile) {
-            return res.status(400).json({ message: 'Imagem é obrigatória.' });
+        const { title, url, videoUrl, tags } = req.body;
+        if (!url) {
+            return res.status(400).json({ message: 'URL da imagem é obrigatória.' });
         }
 
-        const videoFile = req.files && req.files.video ? req.files.video[0] : null;
-        const tags = req.body.tags
-            ? req.body.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
-            : [];
+        const data = { title, url };
 
-        const baseUrl = `${req.protocol}://${req.get('host')}`;
-        const folderName = req.savedImageFolder || '';
-        const imageUrl = `${baseUrl}/uploads/images/${folderName}/${imageFile.filename}`;
-        const data = {
-            title: req.body.title,
-        };
-        data.url = imageUrl;
-        if (videoFile) {
-            data.videoUrl = `${baseUrl}/uploads/videos/${videoFile.filename}`;
+        if (videoUrl) {
+            data.videoUrl = videoUrl;
         }
-        if (tags.length > 0) {
-            data.tags = tags;
+
+        if (tags) {
+            const tagsArray = tags
+                .split(',')
+                .map(tag => tag.trim())
+                .filter(tag => tag);
+            if (tagsArray.length > 0) {
+                data.tags = tagsArray;
+            }
         }
 
         const newImage = await galleryService.createGalleryImage(data);
@@ -82,28 +77,6 @@ const deleteGalleryController = async (req, res, next) => {
         const deletedImage = await galleryService.deleteGalleryImage(imageId);
         if (!deletedImage) {
             return res.status(404).json({ message: 'Imagem não encontrada.' });
-        }
-
-        if (deletedImage.url) {
-            try {
-                const imageUrlPath = new URL(deletedImage.url).pathname; // /uploads/images/<folder>/<file>
-                const imagePath = path.join(__dirname, '..', '..', imageUrlPath);
-                fs.unlink(imagePath, () => {
-                    const dir = path.dirname(imagePath);
-                    fs.readdir(dir, (err, files) => {
-                        if (!err && files.length === 0) {
-                            fs.rmdir(dir, () => {});
-                        }
-                    });
-                });
-            } catch (err) {
-                // ignore errors during file cleanup
-            }
-        }
-        if (deletedImage.videoUrl) {
-            const videoFile = path.basename(deletedImage.videoUrl);
-            const videoPath = path.join(__dirname, '..', '..', 'uploads', 'videos', videoFile);
-            fs.unlink(videoPath, () => {});
         }
 
         res.status(200).json({ message: 'Imagem removida.' });
