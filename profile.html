@@ -21,7 +21,7 @@
     <div class="actions">
       <button class="btn btn-primary">Fazer Upload</button>
       <a class="avatar" href="/profile.html" aria-label="Perfil">
-        <img src="/public/assets/img/avatar-default.svg" alt="Seu perfil">
+        <img data-protected-src="/public/assets/img/avatar-default.svg" alt="Seu perfil">
       </a>
     </div>
   </div>
@@ -29,7 +29,7 @@
 
 <main class="container profile">
   <section class="profile-header">
-    <img class="avatar" src="/public/assets/img/artist.svg" alt="Avatar de Luna">
+    <img class="avatar" data-protected-src="/public/assets/img/artist.svg" alt="Avatar de Luna">
     <h1 class="title">Luna</h1>
     <p class="bio">Artista de retratos digitais.</p>
     <div class="stats"><span><strong id="count">0</strong> obras</span></div>
@@ -51,6 +51,7 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script type="module" src="/public/js/protect-images.js"></script>
 <script type="module" src="/public/js/profile.js"></script>
 </body>
 </html>

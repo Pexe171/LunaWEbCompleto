@@ -1,6 +1,7 @@
 import { enhanceMasonry } from './modules/masonry.js';
 import { fadeIn, likeBurst, staggerFadeIn, rotateOnHover, colorTransition, showLoader, hideLoader } from './modules/animations-extended.js';
 import { toggleLike, isLiked } from './modules/ui.js';
+import { signElement } from './protect-images.js';
 
 const state = { q:'', tag:'Tudo', artworks:[] };
 
@@ -9,10 +10,10 @@ async function load(){
   const res = await fetch('/public/js/data/mock-artworks.json');
   state.artworks = await res.json();
   hideLoader();
-  render();
+  await render();
 }
 
-function render(){
+async function render(){
   const list = document.querySelector('.masonry');
   const placeholder = document.querySelector('.gallery-placeholder');
   list.innerHTML = '';
@@ -31,21 +32,25 @@ function render(){
   list.style.display = '';
 
   const frag = document.createDocumentFragment();
-  filtered.forEach((a,i)=>{
+  for (const [i, a] of filtered.entries()) {
     const card = document.createElement('article');
     card.className='art-card';
     card.tabIndex=0;
     const liked = isLiked(a.id);
-    card.innerHTML = `
-      <img src="${a.thumb}" alt="${a.title} de ${a.artist}">
-      <div class="overlay">
+    const img = document.createElement('img');
+    img.setAttribute('data-protected-src', a.thumb);
+    await signElement(img);
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    overlay.innerHTML = `
         <h3 class="title">${a.title}</h3>
         <p class="artist">por ${a.artist}</p>
         <button class="like ${liked?'is-liked':''}" aria-label="Curtir">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-4.35-9-7.5S-.5 5.5 2.25 3.75C5-1 12 4.5 12 4.5S19-1 21.75 3.75 21 13.5 12 21z"/></svg>
-        </button>
-      </div>`;
-    const likeBtn = card.querySelector('.like');
+        </button>`;
+    card.appendChild(img);
+    card.appendChild(overlay);
+    const likeBtn = overlay.querySelector('.like');
     likeBtn.addEventListener('click', (e)=>{
       e.stopPropagation();
       toggleLike(a.id);
@@ -56,7 +61,7 @@ function render(){
     card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); card.click(); }});
     frag.appendChild(card);
     fadeIn(card, i*20);
-  });
+  }
   list.appendChild(frag);
   enhanceMasonry(list);
   staggerFadeIn('.masonry', '.art-card');
