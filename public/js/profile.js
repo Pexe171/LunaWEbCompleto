@@ -1,5 +1,6 @@
 import { enhanceMasonry } from './modules/masonry.js';
 import { fadeIn, showLoader, hideLoader, pageIntro, parallaxOnScroll } from './modules/animations-extended.js';
+import { signElement } from './protect-images.js';
 
 const USER_NAME = 'Luna';
 
@@ -9,22 +10,25 @@ async function load(){
   const all = await res.json();
   const mine = all.filter(a => a.artist === USER_NAME);
   hideLoader();
-  render(mine);
+  await render(mine);
 }
 
-function render(artworks){
+async function render(artworks){
   const list = document.querySelector('.masonry');
   const frag = document.createDocumentFragment();
-  artworks.forEach((a,i)=>{
+  for (const [i, a] of artworks.entries()){
     const card = document.createElement('article');
     card.className = 'art-card';
     card.tabIndex = 0;
-    card.innerHTML = `<img src="${a.thumb}" alt="${a.title} de ${a.artist}">`;
+    const img = document.createElement('img');
+    img.setAttribute('data-protected-src', a.thumb);
+    await signElement(img);
+    card.appendChild(img);
     card.addEventListener('click', ()=> location.href = `artwork.html?id=${a.id}`);
     card.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); card.click(); }});
     frag.appendChild(card);
     fadeIn(card, i*20);
-  });
+  }
   list.appendChild(frag);
   document.getElementById('count').textContent = artworks.length;
   enhanceMasonry(list);

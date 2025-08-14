@@ -14,7 +14,7 @@
 <body>
 <main class="auth">
   <section class="panel media">
-    <img src="/public/assets/img/a2-large.svg" alt="Ilustração de artista da galeria">
+    <img data-protected-src="/public/assets/img/a2-large.svg" alt="Ilustração de artista da galeria">
   </section>
   <section class="panel form" style="background:var(--bg)">
     <div class="form-inner">
@@ -33,6 +33,7 @@
   </section>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script type="module" src="/public/js/protect-images.js"></script>
 <script type="module">
   import { pulseAttention } from '/public/js/modules/animations-extended.js';
   document.addEventListener('DOMContentLoaded', () => {

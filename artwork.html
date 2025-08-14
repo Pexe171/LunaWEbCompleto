@@ -21,7 +21,7 @@
     <div class="actions">
       <button class="btn btn-primary">Fazer Upload</button>
       <a class="avatar" href="/profile.html" aria-label="Perfil">
-        <img src="/public/assets/img/avatar-default.svg" alt="Seu perfil">
+        <img data-protected-src="/public/assets/img/avatar-default.svg" alt="Seu perfil">
       </a>
     </div>
   </div>
@@ -29,12 +29,12 @@
 
 <main class="artwork container">
   <figure class="hero">
-    <img src="/public/assets/img/a1-large.svg" alt="Retrato em Terracota">
+    <img id="hero-img" data-protected-src="/public/assets/img/a1-large.svg" alt="Retrato em Terracota">
   </figure>
   <aside class="meta">
     <h1 class="title">Retrato em Terracota</h1>
-    <a class="artist" href="#">
-      <img class="avatar" src="/public/assets/img/artist.svg" alt="Avatar de Luna">
+      <a class="artist" href="#">
+      <img class="avatar" data-protected-src="/public/assets/img/artist.svg" alt="Avatar de Luna">
       <span>Luna</span>
     </a>
     <p class="desc">Descrição da obra...</p>
@@ -56,6 +56,7 @@
   </aside>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script type="module" src="/public/js/protect-images.js"></script>
 <script type="module">
   import { svgDraw } from '/public/js/modules/animations-extended.js';
   document.addEventListener('DOMContentLoaded', () => {

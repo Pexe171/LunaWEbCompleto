@@ -2,6 +2,7 @@ const express = require('express');
 const authRoutes = require('./authRoutes');
 const galleryRoutes = require('./galleryRoutes');
 const userRoutes = require('./userRoutes');
+const imageRoutes = require('./imageRoutes');
 
 const apiRouter = express.Router();
 
@@ -13,5 +14,6 @@ apiRouter.get('/health', (req, res) => {
 apiRouter.use('/auth', authRoutes);
 apiRouter.use('/gallery', galleryRoutes);
 apiRouter.use('/users', userRoutes);
+apiRouter.use('/images', imageRoutes);
 
 module.exports = apiRouter;
