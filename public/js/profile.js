@@ -30,4 +30,13 @@ function render(artworks){
   enhanceMasonry(list);
 }
 
-document.addEventListener('DOMContentLoaded', load);
+document.addEventListener('DOMContentLoaded', () => {
+  anime({
+    targets: '.profile-header',
+    translateY: [-20, 0],
+    opacity: [0, 1],
+    duration: 600,
+    easing: 'easeOutQuad'
+  });
+  load();
+});

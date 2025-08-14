@@ -1,10 +1,20 @@
-export function fadeIn(el, delay=0){
-  el.style.opacity = 0;
-  el.style.transform = 'translateY(8px)';
-  requestAnimationFrame(()=>{
-    el.style.transition = `opacity var(--dur) var(--easing) ${delay}ms, transform var(--dur) var(--easing) ${delay}ms`;
-    el.style.opacity = 1;
-    el.style.transform = 'translateY(0)';
+export function fadeIn(el, delay = 0) {
+  anime({
+    targets: el,
+    opacity: [0, 1],
+    translateY: [8, 0],
+    duration: 500,
+    easing: 'easeOutQuad',
+    delay
+  });
+}
+
+export function likeBurst(el) {
+  anime({
+    targets: el,
+    scale: [1, 1.3, 1],
+    duration: 500,
+    easing: 'easeOutElastic(1, .5)'
   });
 }
 

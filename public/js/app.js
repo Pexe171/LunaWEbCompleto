@@ -1,5 +1,5 @@
 import { enhanceMasonry } from './modules/masonry.js';
-import { fadeIn, showLoader, hideLoader } from './modules/animations.js';
+import { fadeIn, showLoader, hideLoader, likeBurst } from './modules/animations.js';
 import { toggleLike, isLiked } from './modules/ui.js';
 
 const state = { q:'', tag:'Tudo', artworks:[] };
@@ -50,6 +50,7 @@ function render(){
       e.stopPropagation();
       toggleLike(a.id);
       likeBtn.classList.toggle('is-liked');
+      likeBurst(likeBtn);
     });
     card.addEventListener('click', ()=> location.href = `artwork.html?id=${a.id}`);
     card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); card.click(); }});
