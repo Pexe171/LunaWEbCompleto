@@ -1,5 +1,5 @@
 import { enhanceMasonry } from './modules/masonry.js';
-import { fadeIn, showLoader, hideLoader } from './modules/animations.js';
+import { fadeIn, showLoader, hideLoader, pageIntro, parallaxOnScroll } from './modules/animations-extended.js';
 
 const USER_NAME = 'Luna';
 
@@ -31,12 +31,7 @@ function render(artworks){
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  anime({
-    targets: '.profile-header',
-    translateY: [-20, 0],
-    opacity: [0, 1],
-    duration: 600,
-    easing: 'easeOutQuad'
-  });
+  pageIntro('.profile-header', ['.title', '.bio', '.stats', '.edit-form']);
+  parallaxOnScroll('.profile-header', 0.05);
   load();
 });

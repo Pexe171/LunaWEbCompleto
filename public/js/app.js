@@ -1,5 +1,5 @@
 import { enhanceMasonry } from './modules/masonry.js';
-import { fadeIn, showLoader, hideLoader, likeBurst } from './modules/animations.js';
+import { fadeIn, likeBurst, staggerFadeIn, rotateOnHover, colorTransition, showLoader, hideLoader } from './modules/animations-extended.js';
 import { toggleLike, isLiked } from './modules/ui.js';
 
 const state = { q:'', tag:'Tudo', artworks:[] };
@@ -59,6 +59,11 @@ function render(){
   });
   list.appendChild(frag);
   enhanceMasonry(list);
+  staggerFadeIn('.masonry', '.art-card');
+  rotateOnHover('.art-card .like');
+  colorTransition('.chip.is-active', {
+    backgroundColor: ['#934232', '#b95d4a']
+  });
 }
 
 function bindUI(){
