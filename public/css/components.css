@@ -18,7 +18,6 @@
 
 .art-card{position:relative;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);break-inside:avoid;margin:0 0 var(--space-6);}
 .art-card .overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:var(--space-4);color:var(--bg);background:rgba(147,66,50,0);opacity:0;transition:opacity var(--dur) var(--easing),background var(--dur) var(--easing);}
-.art-card:hover .overlay,.art-card:focus-within .overlay{background:color-mix(in srgb, var(--primary) 85%, transparent);opacity:1;}
 .art-card .title{margin:0;font-family:var(--font-display);}
 .art-card .artist{margin:0;font-size:.875rem;}
 .art-card .like{position:absolute;top:var(--space-2);right:var(--space-2);background:none;border:none;padding:var(--space-2);cursor:pointer;}
@@ -29,3 +28,11 @@
 @keyframes wave{from{stroke-dashoffset:100;}to{stroke-dashoffset:0;}}
 .wave{stroke:var(--secondary);stroke-width:2;fill:none;stroke-dasharray:100;animation:wave var(--dur-slow) var(--easing) infinite;}
 .art-card .like.is-liked svg{fill:var(--primary);}
+
+/* Modal de visualização de arte */
+.modal{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:rgba(0,0,0,.7);opacity:0;pointer-events:none;}
+.modal[aria-hidden="false"]{pointer-events:auto;}
+.modal-content{position:relative;background:var(--bg);padding:var(--space-6);border-radius:var(--radius-md);max-width:90%;max-height:90%;overflow:auto;display:flex;flex-direction:column;align-items:center;gap:var(--space-4);}
+.modal-content img{max-width:100%;height:auto;border-radius:var(--radius-md);}
+.modal-close{position:absolute;top:var(--space-2);right:var(--space-2);background:none;border:none;font-size:1.5rem;color:var(--primary);cursor:pointer;}
+

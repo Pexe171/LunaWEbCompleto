@@ -122,6 +122,40 @@ export function pageIntro(selectorContainer = 'body', elems = ['.title', '.desc'
   });
 }
 
+export function hoverPreview(selector) {
+  // O que é: destaque do card ao passar o mouse (zoom + overlay)
+  // Por que: fornece feedback visual rico e melhora a percepção de interatividade
+  document.querySelectorAll(selector).forEach(card => {
+    const overlay = card.querySelector('.overlay');
+    const img = card.querySelector('img');
+    if(!overlay || !img) return;
+
+    card.addEventListener('mouseenter', () => {
+      anime({ targets: img, scale: 1.05, duration: 300, easing: 'easeOutQuad' });
+      anime({
+        targets: overlay,
+        opacity: 1,
+        translateY: [20, 0],
+        background: 'color-mix(in srgb, var(--primary) 85%, transparent)',
+        duration: 300,
+        easing: 'easeOutQuad'
+      });
+    });
+
+    card.addEventListener('mouseleave', () => {
+      anime({ targets: img, scale: 1, duration: 300, easing: 'easeOutQuad' });
+      anime({
+        targets: overlay,
+        opacity: 0,
+        translateY: 20,
+        background: 'rgba(147,66,50,0)',
+        duration: 300,
+        easing: 'easeOutQuad'
+      });
+    });
+  });
+}
+
 export function showLoader(){
   const loader = document.querySelector('.loader');
   if(loader) loader.hidden = false;
