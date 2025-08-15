@@ -90,4 +90,9 @@ function bindUI(){
   search.addEventListener('input', e=>{ state.q = e.target.value.toLowerCase(); render(); });
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{ bindUI(); load(); initModal(); });
+document.addEventListener('DOMContentLoaded', ()=>{
+  if (!document.querySelector('.masonry')) return;
+  bindUI();
+  load();
+  initModal();
+});
