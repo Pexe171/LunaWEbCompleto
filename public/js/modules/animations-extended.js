@@ -84,9 +84,13 @@ export function svgDraw(selector) {
   });
 }
 
-export function colorTransition(selector, props = { color: ['#fff', '#ffd7b3'] }) {
+export function colorTransition(selector, props = {}) {
   // O que é: transição de cor (texto/fundo)
   // Por que: bom para estados ativos/selecionados (chips, filtros, etc.)
+  const rootStyles = getComputedStyle(document.documentElement);
+  const from = (rootStyles.getPropertyValue('--text') || rootStyles.getPropertyValue('--foreground')).trim();
+  const to = rootStyles.getPropertyValue('--accent').trim();
+  props.color ??= [from, to];
   anime({
     targets: selector,
     ...props,
