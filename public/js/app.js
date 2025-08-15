@@ -1,6 +1,7 @@
 import { enhanceMasonry } from './modules/masonry.js';
-import { fadeIn, likeBurst, staggerFadeIn, rotateOnHover, colorTransition, showLoader, hideLoader } from './modules/animations-extended.js';
+import { fadeIn, likeBurst, staggerFadeIn, rotateOnHover, colorTransition, showLoader, hideLoader, hoverPreview } from './modules/animations-extended.js';
 import { toggleLike, isLiked } from './modules/ui.js';
+import { openModal, initModal } from './modules/modal.js';
 import { signElement } from './protect-images.js';
 
 const state = { q:'', tag:'Tudo', artworks:[] };
@@ -57,8 +58,8 @@ async function render(){
       likeBtn.classList.toggle('is-liked');
       likeBurst(likeBtn);
     });
-    card.addEventListener('click', ()=> location.href = `artwork.html?id=${a.id}`);
-    card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); card.click(); }});
+    card.addEventListener('click', ()=> openModal(a));
+    card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openModal(a); }});
     frag.appendChild(card);
     fadeIn(card, i*20);
   }
@@ -66,6 +67,7 @@ async function render(){
   enhanceMasonry(list);
   staggerFadeIn('.masonry', '.art-card');
   rotateOnHover('.art-card .like');
+  hoverPreview('.art-card');
   colorTransition('.chip.is-active', {
     backgroundColor: ['#934232', '#b95d4a']
   });
@@ -84,4 +86,4 @@ function bindUI(){
   search.addEventListener('input', e=>{ state.q = e.target.value.toLowerCase(); render(); });
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{ bindUI(); load(); });
+document.addEventListener('DOMContentLoaded', ()=>{ bindUI(); load(); initModal(); });
