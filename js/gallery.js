@@ -49,4 +49,10 @@ export function renderGallery(posts, root = document.querySelector('.gallery')) 
       <div style="height:10px"></div>
     </article>
   `).join('');
+
+  root.querySelectorAll('.card__media').forEach(media => {
+    media.addEventListener('click', () => {
+      media.closest('.card').classList.toggle('card--active');
+    });
+  });
 }
