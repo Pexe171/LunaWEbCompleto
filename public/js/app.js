@@ -1,5 +1,5 @@
 import { enhanceMasonry } from './modules/masonry.js';
-import { fadeIn, likeBurst, staggerFadeIn, rotateOnHover, colorTransition, showLoader, hideLoader, hoverPreview } from './modules/animations-extended.js';
+import { fadeIn, likeBurst, staggerFadeIn, rotateOnHover, colorTransition, showLoader, hideLoader } from './modules/animations-extended.js';
 import { toggleLike, isLiked } from './modules/ui.js';
 import { openModal, initModal } from './modules/modal.js';
 import { signElement } from './protect-images.js';
@@ -18,7 +18,7 @@ async function render(){
   const list = document.querySelector('.masonry');
   const placeholder = document.querySelector('.gallery-placeholder');
   list.innerHTML = '';
-  const filtered = state.artworks.filter(a =>
+    const filtered = state.artworks.filter(a =>
     (state.tag==='Tudo' || a.tags.includes(state.tag.toLowerCase())) &&
     (a.title.toLowerCase().includes(state.q) || a.artist.toLowerCase().includes(state.q) || a.tags.join(' ').includes(state.q))
   );
@@ -32,43 +32,47 @@ async function render(){
   placeholder.hidden = true;
   list.style.display = '';
 
-  const frag = document.createDocumentFragment();
-  for (const [i, a] of filtered.entries()) {
-    const card = document.createElement('article');
-    card.className='art-card';
-    card.tabIndex=0;
-    const liked = isLiked(a.id);
-    const img = document.createElement('img');
-    img.setAttribute('data-protected-src', a.thumb);
-    await signElement(img);
-    const overlay = document.createElement('div');
-    overlay.className = 'overlay';
-    overlay.innerHTML = `
-        <h3 class="title">${a.title}</h3>
-        <p class="artist">por ${a.artist}</p>
-        <button class="like ${liked?'is-liked':''}" aria-label="Curtir">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-4.35-9-7.5S-.5 5.5 2.25 3.75C5-1 12 4.5 12 4.5S19-1 21.75 3.75 21 13.5 12 21z"/></svg>
-        </button>`;
-    card.appendChild(img);
-    card.appendChild(overlay);
-    const likeBtn = overlay.querySelector('.like');
-    likeBtn.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      toggleLike(a.id);
-      likeBtn.classList.toggle('is-liked');
-      likeBurst(likeBtn);
-    });
-    card.addEventListener('click', ()=> openModal(a));
-    card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openModal(a); }});
-    frag.appendChild(card);
-    fadeIn(card, i*20);
-  }
-  list.appendChild(frag);
-  enhanceMasonry(list);
-  staggerFadeIn('.masonry', '.art-card');
-  rotateOnHover('.art-card .like');
-  hoverPreview('.art-card');
-  colorTransition('.chip.is-active', {
+    const frag = document.createDocumentFragment();
+    for (const [i, a] of filtered.entries()) {
+      const card = document.createElement('article');
+      card.className='art-card';
+      card.tabIndex=0;
+      const liked = isLiked(a.id);
+      card.innerHTML = `
+        <img data-protected-src="${a.thumb}" alt="${a.title}">
+        <div class="card-footer">
+          <div class="actions">
+            <button class="like ${liked?'is-liked':''}" aria-label="Curtir">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6-4.35-9-7.5S-.5 5.5 2.25 3.75C5-1 12 4.5 12 4.5S19-1 21.75 3.75 21 13.5 12 21z"/></svg>
+            </button>
+            <button class="comment" aria-label="Comentar">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 6c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v9c0 1.1.9 2 2 2h12l4 4V6z"/></svg>
+            </button>
+            <button class="share" aria-label="Compartilhar">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.02-4.11A2.99 2.99 0 0018 7.91a3 3 0 10-2.83-4.11L8.15 7.91A3 3 0 006 7a3 3 0 000 6c1.3 0 2.4-.84 2.82-2l7.12 4.16a3 3 0 102.06-1.08z"/></svg>
+            </button>
+          </div>
+          <p class="caption"><strong>${a.title}</strong> por ${a.artist}</p>
+        </div>`;
+      const img = card.querySelector('img');
+      await signElement(img);
+      const likeBtn = card.querySelector('.like');
+      likeBtn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        toggleLike(a.id);
+        likeBtn.classList.toggle('is-liked');
+        likeBurst(likeBtn);
+      });
+      card.addEventListener('click', (e)=>{ if(e.target.closest('button')) return; openModal(a); });
+      card.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openModal(a); }});
+      frag.appendChild(card);
+      fadeIn(card, i*20);
+    }
+    list.appendChild(frag);
+    enhanceMasonry(list);
+    staggerFadeIn('.masonry', '.art-card');
+    rotateOnHover('.art-card .like');
+    colorTransition('.chip.is-active', {
     backgroundColor: ['#934232', '#b95d4a']
   });
 }
