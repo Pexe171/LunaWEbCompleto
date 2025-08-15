@@ -72,9 +72,12 @@ async function render(){
     enhanceMasonry(list);
     staggerFadeIn('.masonry', '.art-card');
     rotateOnHover('.art-card .like');
+    const rootStyles = getComputedStyle(document.documentElement);
+    const primary = rootStyles.getPropertyValue('--primary').trim();
+    const primaryLight = `color-mix(in srgb, ${primary} 80%, white)`;
     colorTransition('.chip.is-active', {
-    backgroundColor: ['#934232', '#b95d4a']
-  });
+      backgroundColor: [primary, primaryLight]
+    });
 }
 
 function bindUI(){
