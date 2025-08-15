@@ -18,6 +18,7 @@ interface ImageCardProps {
 
 export default function ImageCard({ image }: ImageCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -49,10 +50,19 @@ export default function ImageCard({ image }: ImageCardProps) {
   return (
     <>
       <article
-        className="card"
-        onClick={() => setIsModalOpen(true)}
+        className={`card ${showOverlay ? "card--active" : ""}`}
+        onClick={() => {
+          setIsModalOpen(true);
+          setShowOverlay(false);
+        }}
       >
-        <div className="card__media">
+        <div
+          className="card__media"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowOverlay((v) => !v);
+          }}
+        >
           <NextImage
             src={imageUrl}
             alt={image.title}
