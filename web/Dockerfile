@@ -1,6 +1,6 @@
 # Dockerfile para o Frontend (Next.js)
 # Usa a imagem oficial do Node.js 18 como base
-FROM node:18-alpine
+FROM node:18.19-alpine
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app
@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instala as dependências do npm. Esta linha estava faltando.
-RUN npm install
+RUN npm install && apk add --no-cache curl
 
 # Copia todo o código-fonte restante para o container
 COPY . .
@@ -22,3 +22,4 @@ EXPOSE 3000
 # quaisquer novas dependências sejam instaladas quando a aplicação
 # estiver sendo executada com volumes montados.
 CMD ["sh", "-c", "npm install && npm run dev"]
+
