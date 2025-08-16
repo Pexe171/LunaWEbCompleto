@@ -68,8 +68,10 @@ Certifique-se de ter o Docker e o Docker Compose instalados.
     * **Galeria Web:** http://localhost:3000
 
 4.  **Verificações de Segurança:**
-    * Healthcheck da API: `curl http://localhost:3333/api/v1/health`
-    * Cabeçalhos e CORS: `curl -I -H "Origin: http://localhost:3000" http://localhost:3333/api/v1/health`
+    * Healthcheck do processo: `curl http://localhost:3333/healthz`
+    * Prontidão de dependências: `curl http://localhost:3333/readyz`
+    * Métricas básicas: `curl http://localhost:3333/metrics`
+    * Cabeçalhos e CORS: `curl -I -H "Origin: http://localhost:3000" http://localhost:3333/healthz`
 
 Para parar os serviços, pressione `Ctrl + C` no terminal e depois execute: `docker-compose down`.
 
@@ -82,6 +84,14 @@ Para parar os serviços, pressione `Ctrl + C` no terminal e depois execute: `doc
 | Produção | 5 | 20 |
 
 Os limites acima podem ser ajustados pelas variáveis `RATE_LIMIT_AUTH_WINDOW_MS`, `RATE_LIMIT_AUTH_MAX`, `RATE_LIMIT_UPLOAD_WINDOW_MS` e `RATE_LIMIT_UPLOAD_MAX`. Quando o limite é excedido, a API responde com **429** e o corpo `{ "message": "Limite de requisições atingido. Tente novamente mais tarde." }`, além dos cabeçalhos `RateLimit-*`.
+
+### Métricas
+
+O endpoint `/metrics` expõe um JSON com estatísticas por rota, incluindo:
+
+* quantidade de requisições;
+* latência p50 e p95 em milissegundos;
+* contagem de erros 4xx e 5xx.
 
 ### 2. Localmente (Manual)
 

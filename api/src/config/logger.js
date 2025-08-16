@@ -4,9 +4,9 @@ const config = require('./index');
 const logger = createLogger({
     level: config.logLevel,
     format: format.combine(
-        format.colorize(),
         format.timestamp(),
-        format.printf(({ timestamp, level, message }) => `${timestamp} [${level}] ${message}`)
+        format.errors({ stack: true }),
+        format.json()
     ),
     transports: [new transports.Console()]
 });

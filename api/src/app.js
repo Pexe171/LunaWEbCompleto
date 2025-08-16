@@ -1,10 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const mongoose = require('mongoose');
 const apiRoutes = require('./routes');
 const { errorHandler } = require('./middlewares/errorHandler');
+const { requestLogger } = require('./middlewares/requestLogger');
+const metrics = require('./utils/metrics');
 const config = require('./config');
 
 const app = express();
@@ -42,7 +44,29 @@ const limiter = rateLimit({
   max: config.rateLimit.max
 });
 app.use(limiter);
-app.use(morgan('dev'));
+app.use(requestLogger);
+
+app.get('/healthz', (req, res) => {
+  res.json({ status: 'OK' });
+});
+
+app.get('/readyz', (req, res) => {
+  const state = mongoose.connection.readyState;
+  let status = 'Fail';
+  let code = 500;
+  if (state === 1) {
+    status = 'OK';
+    code = 200;
+  } else if (state === 2 || state === 3) {
+    status = 'Degraded';
+    code = 503;
+  }
+  res.status(code).json({ status });
+});
+
+app.get('/metrics', (req, res) => {
+  res.json(metrics.summary());
+});
 
 app.use('/api/v1', apiRoutes);
 
