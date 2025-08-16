@@ -1,17 +1,25 @@
 "use client";
 
+import type { Metadata } from "next";
 import AuthForm from "@/components/AuthForm";
+import Loading from "@/components/Loading";
+import ErrorMessage from "@/components/ErrorMessage";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 
+export const metadata: Metadata = {
+  title: "Login - Galeria de Imagens",
+  description: "Acesse sua conta para gerenciar suas imagens.",
+};
+
 export default function LoginPage() {
   const router = useRouter();
   const { login, isAuthenticated, isInitialized } = useAuth();
 
-  const { data: userCount } = useQuery({
+  const { data: userCount, isLoading, isError } = useQuery({
     queryKey: ["user-count"],
     queryFn: async () => {
       const res = await api.get("/users/count");
@@ -25,8 +33,14 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, isInitialized, router]);
 
-  if (!isInitialized) {
-    return null;
+  if (!isInitialized || isLoading) {
+    return <Loading />;
+  }
+
+  if (isError) {
+    return (
+      <ErrorMessage message="Erro ao carregar contagem de usuários." />
+    );
   }
 
   return (

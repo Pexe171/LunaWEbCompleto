@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contato - Galeria de Imagens",
+  description: "Entre em contato com nossa equipe.",
+};
+
 export default function Contato() {
   return (
     <div className="flex flex-col gap-4">

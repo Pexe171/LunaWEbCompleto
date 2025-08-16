@@ -1,9 +1,17 @@
 "use client";
 
+import type { Metadata } from "next";
 import GalleryGrid from "@/components/GalleryGrid";
+import Loading from "@/components/Loading";
+import ErrorMessage from "@/components/ErrorMessage";
 import { api } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { Image } from "@/types";
+
+export const metadata: Metadata = {
+  title: "Publicações - Área Administrativa",
+  description: "Gerencie as publicações da galeria.",
+};
 
 interface GalleryResponse {
   images: Image[];
@@ -19,8 +27,9 @@ export default function PublicationsPage() {
     retry: false,
   });
 
-  if (isLoading) return <div>Carregando galeria...</div>;
-  if (isError) return <div>Erro ao carregar galeria.</div>;
+  if (isLoading) return <Loading message="Carregando galeria..." />;
+  if (isError)
+    return <ErrorMessage message="Erro ao carregar galeria." />;
 
   return (
     <div className="flex flex-col gap-8">

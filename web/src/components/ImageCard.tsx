@@ -50,10 +50,19 @@ export default function ImageCard({ image }: ImageCardProps) {
   return (
     <>
       <article
+        tabIndex={0}
+        role="button"
         className={`card ${showOverlay ? "card--active" : ""}`}
         onClick={() => {
           setIsModalOpen(true);
           setShowOverlay(false);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setIsModalOpen(true);
+            setShowOverlay(false);
+          }
         }}
       >
         <div

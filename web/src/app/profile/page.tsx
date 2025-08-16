@@ -1,5 +1,6 @@
 "use client";
 
+import type { Metadata } from "next";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
@@ -21,6 +22,11 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
+
+export const metadata: Metadata = {
+  title: "Perfil - Galeria de Imagens",
+  description: "Gerencie suas informações pessoais.",
+};
 
 export default function ProfilePage() {
   const { user, logout, isAuthenticated, isInitialized } = useAuth();
