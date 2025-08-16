@@ -18,3 +18,10 @@ npm run dev
 ```
 
 A aplicação ficará disponível em http://localhost:3000.
+
+## Cache e Revalidação
+
+As requisições ao backend utilizam o React Query com `staleTime` de 60 segundos, o que
+garante um cache leve e revalidação automática após esse período ou quando a página é
+focada novamente. As rotas expõem também `sitemap` e `robots` para auxiliar mecanismos
+de busca.

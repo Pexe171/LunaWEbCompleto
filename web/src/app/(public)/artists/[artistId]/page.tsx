@@ -7,6 +7,7 @@ import { api } from "@/lib/api";
 import { Artist, Image as ImageType } from "@/types";
 import GalleryGrid from "@/components/GalleryGrid";
 import FollowButton from "@/components/FollowButton";
+import Loading from "@/components/Loading";
 import { resolveAssetUrl } from "@/lib/utils";
 
 export default function ArtistPage() {
@@ -41,7 +42,7 @@ export default function ArtistPage() {
   });
 
   if (artistLoading) {
-    return <div className="p-8">Carregando...</div>;
+    return <Loading className="p-8" />;
   }
 
   if (!artist) {
@@ -69,7 +70,7 @@ export default function ArtistPage() {
         )}
       </div>
       {imagesLoading ? (
-        <div>Carregando galeria...</div>
+        <Loading message="Carregando galeria..." />
       ) : (
         <GalleryGrid images={images} />
       )}

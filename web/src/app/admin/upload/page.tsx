@@ -1,5 +1,6 @@
 "use client";
 
+import type { Metadata } from "next";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,6 +22,11 @@ import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
 import { imageSchema } from "@/lib/validators";
 import { useRouter } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Upload de Imagem - Área Administrativa",
+  description: "Envie novas imagens para a galeria.",
+};
 
 export default function UploadPage() {
   const router = useRouter();

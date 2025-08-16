@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sobre - Galeria de Imagens",
+  description: "Informações sobre o site.",
+};
+
 export default function Sobre() {
   return (
     <div className="flex flex-col gap-4">
