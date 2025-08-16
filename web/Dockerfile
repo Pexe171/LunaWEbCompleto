@@ -1,6 +1,6 @@
 # Dockerfile para o Frontend (Next.js)
-# Usa a imagem oficial do Node.js 18 como base
-FROM node:18.19-alpine
+# Usa a imagem oficial do Node.js 20 como base
+FROM node:20-alpine
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app

@@ -1,5 +1,5 @@
 # Dockerfile para a API
-FROM node:18.19-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
