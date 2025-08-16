@@ -10,7 +10,18 @@ const config = {
         accessExpires: process.env.ACCESS_TOKEN_EXPIRES || '15m',
         refreshExpires: process.env.REFRESH_TOKEN_EXPIRES || '7d'
     },
-    logLevel: process.env.LOG_LEVEL || 'info'
+    logLevel: process.env.LOG_LEVEL || 'info',
+    cors: {
+        origins: (process.env.CORS_ORIGINS || '')
+            .split(',')
+            .map(o => o.trim())
+            .filter(Boolean)
+    },
+    payloadLimit: process.env.PAYLOAD_LIMIT || '100kb',
+    rateLimit: {
+        windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10),
+        max: parseInt(process.env.RATE_LIMIT_MAX || '100', 10)
+    }
 };
 
 module.exports = config;

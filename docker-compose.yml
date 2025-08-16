@@ -1,12 +1,19 @@
+version: "3.8"
+
 services:
   mongo:
-    image: mongo:4.4
+    image: mongo:4.4.29
     container_name: mongodb
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
-    restart: always
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping').ok"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   api:
     build: ./api
@@ -22,13 +29,23 @@ services:
       - REFRESH_TOKEN_EXPIRES=7d
       - NODE_ENV=development
       - LOG_LEVEL=info
+      - CORS_ORIGINS=http://localhost:3000
+      - PAYLOAD_LIMIT=100kb
+      - RATE_LIMIT_WINDOW_MS=900000
+      - RATE_LIMIT_MAX=100
     command: npm run dev
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     volumes:
       - ./api:/app
-      - /app/node_modules
-    restart: always
+      - api-node-modules:/app/node_modules
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3333/api/v1/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   web:
     build: ./web
@@ -37,14 +54,22 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://api:3333/api/v1
-      - NEXT_PUBLIC_ASSET_BASE_URL=http://localhost:3333   # usado pelo browser
-      - ASSET_BASE_URL_INTERNAL=http://api:3333            # usado pelo SSR/Next
+      - NEXT_PUBLIC_ASSET_BASE_URL=http://localhost:3333
+      - ASSET_BASE_URL_INTERNAL=http://api:3333
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     volumes:
       - ./web:/app
-      - /app/node_modules
-    restart: always
+      - web-node-modules:/app/node_modules
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 volumes:
   mongo-data:
+  api-node-modules:
+  web-node-modules:

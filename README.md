@@ -48,6 +48,10 @@ Certifique-se de ter o Docker e o Docker Compose instalados.
     * `cp ./web/.env.local.example ./web/.env.local`
     * No arquivo `web/.env.local`, defina a URL da API:
       `NEXT_PUBLIC_API_URL=http://localhost:3333/api/v1`
+    * Configure também as novas variáveis de segurança no arquivo `api/.env`:
+      - `CORS_ORIGINS` com a lista de origens permitidas (dev/homolog/prod);
+      - `PAYLOAD_LIMIT` para limitar o tamanho do corpo das requisições JSON;
+      - `RATE_LIMIT_WINDOW_MS` e `RATE_LIMIT_MAX` para controlar o número de requisições por IP.
     * Você pode personalizar os segredos JWT conforme necessário.
 
 2.  **Iniciar os Serviços:**
@@ -60,6 +64,10 @@ Certifique-se de ter o Docker e o Docker Compose instalados.
 3.  **Acessar os Aplicativos:**
     * **API (Docs):** http://localhost:3333/docs
     * **Galeria Web:** http://localhost:3000
+
+4.  **Verificações de Segurança:**
+    * Healthcheck da API: `curl http://localhost:3333/api/v1/health`
+    * Cabeçalhos e CORS: `curl -I -H "Origin: http://localhost:3000" http://localhost:3333/api/v1/health`
 
 Para parar os serviços, pressione `Ctrl + C` no terminal e depois execute: `docker-compose down`.
 
