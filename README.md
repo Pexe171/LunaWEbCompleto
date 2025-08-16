@@ -51,7 +51,9 @@ Certifique-se de ter o Docker e o Docker Compose instalados.
     * Configure também as novas variáveis de segurança no arquivo `api/.env`:
       - `CORS_ORIGINS` com a lista de origens permitidas (dev/homolog/prod);
       - `PAYLOAD_LIMIT` para limitar o tamanho do corpo das requisições JSON;
-      - `RATE_LIMIT_WINDOW_MS` e `RATE_LIMIT_MAX` para controlar o número de requisições por IP.
+      - `RATE_LIMIT_WINDOW_MS` e `RATE_LIMIT_MAX` para controlar o número de requisições por IP;
+      - `RATE_LIMIT_AUTH_WINDOW_MS` e `RATE_LIMIT_AUTH_MAX` para limitar tentativas de login e registro;
+      - `RATE_LIMIT_UPLOAD_WINDOW_MS` e `RATE_LIMIT_UPLOAD_MAX` para controlar uploads de imagens.
     * Você pode personalizar os segredos JWT conforme necessário.
 
 2.  **Iniciar os Serviços:**
@@ -70,6 +72,16 @@ Certifique-se de ter o Docker e o Docker Compose instalados.
     * Cabeçalhos e CORS: `curl -I -H "Origin: http://localhost:3000" http://localhost:3333/api/v1/health`
 
 Para parar os serviços, pressione `Ctrl + C` no terminal e depois execute: `docker-compose down`.
+
+### Limites de Requisições
+
+| Ambiente | Login/Registro (req/min) | Upload (req/h) |
+| --- | --- | --- |
+| Desenvolvimento | 20 | 50 |
+| Homologação | 10 | 30 |
+| Produção | 5 | 20 |
+
+Os limites acima podem ser ajustados pelas variáveis `RATE_LIMIT_AUTH_WINDOW_MS`, `RATE_LIMIT_AUTH_MAX`, `RATE_LIMIT_UPLOAD_WINDOW_MS` e `RATE_LIMIT_UPLOAD_MAX`. Quando o limite é excedido, a API responde com **429** e o corpo `{ "message": "Limite de requisições atingido. Tente novamente mais tarde." }`, além dos cabeçalhos `RateLimit-*`.
 
 ### 2. Localmente (Manual)
 

@@ -20,7 +20,15 @@ const config = {
     payloadLimit: process.env.PAYLOAD_LIMIT || '100kb',
     rateLimit: {
         windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10),
-        max: parseInt(process.env.RATE_LIMIT_MAX || '100', 10)
+        max: parseInt(process.env.RATE_LIMIT_MAX || '100', 10),
+        auth: {
+            windowMs: parseInt(process.env.RATE_LIMIT_AUTH_WINDOW_MS || '60000', 10),
+            max: parseInt(process.env.RATE_LIMIT_AUTH_MAX || '20', 10)
+        },
+        upload: {
+            windowMs: parseInt(process.env.RATE_LIMIT_UPLOAD_WINDOW_MS || '3600000', 10),
+            max: parseInt(process.env.RATE_LIMIT_UPLOAD_MAX || '50', 10)
+        }
     }
 };
 

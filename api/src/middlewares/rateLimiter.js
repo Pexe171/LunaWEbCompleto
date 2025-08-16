@@ -1,9 +1,23 @@
 const rateLimit = require('express-rate-limit');
+const config = require('../config');
+const { logger } = require('../config/logger');
 
-const loginRateLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 10, // Max 10 requests per 15 minutes per IP
-    message: 'Muitas tentativas de login a partir deste IP, por favor tente novamente após 15 minutos.'
-});
+const defaultMessage = 'Limite de requisições atingido. Tente novamente mais tarde.';
 
-module.exports = { loginRateLimiter };
+const createRateLimiter = ({ windowMs, max }) =>
+  rateLimit({
+    windowMs,
+    max,
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (req, res, next, options) => {
+      logger.warn(`IP ${req.ip} excedeu limite em ${req.originalUrl}`);
+      res.status(options.statusCode).json({ message: defaultMessage });
+    },
+    message: { message: defaultMessage }
+  });
+
+const authRateLimiter = createRateLimiter(config.rateLimit.auth);
+const uploadRateLimiter = createRateLimiter(config.rateLimit.upload);
+
+module.exports = { authRateLimiter, uploadRateLimiter };
