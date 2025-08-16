@@ -2,7 +2,7 @@ const { logger } = require('../config/logger');
 const config = require('../config');
 
 const errorHandler = (err, req, res, next) => {
-    logger.error(err.message);
+    logger.error({ requestId: req.requestId, message: err.message });
     const statusCode = err.statusCode || (res.statusCode !== 200 ? res.statusCode : 500);
     const response = {
         codigo: statusCode,
