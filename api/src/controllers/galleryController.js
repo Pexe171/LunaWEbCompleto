@@ -1,4 +1,5 @@
 const galleryService = require('../services/galleryService');
+const AppError = require('../utils/AppError');
 
 const getGalleryController = async (req, res, next) => {
     try {
@@ -70,7 +71,7 @@ const deleteGalleryController = async (req, res, next) => {
         const { imageId } = req.params;
         const deletedImage = await galleryService.deleteGalleryImage(imageId);
         if (!deletedImage) {
-            return res.status(404).json({ message: 'Imagem não encontrada.' });
+            return next(new AppError('Imagem não encontrada.', 404));
         }
 
         res.status(200).json({ message: 'Imagem removida.' });
