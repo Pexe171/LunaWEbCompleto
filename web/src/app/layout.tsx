@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   description: "Uma galeria de imagens com autenticação.",
 };
 
+export const revalidate = 60;
+
 export default function RootLayout({
   children,
 }: Readonly<{

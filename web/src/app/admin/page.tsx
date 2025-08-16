@@ -6,6 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 import { Image } from "@/types";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import LoadingState from "@/components/LoadingState";
+import ErrorState from "@/components/ErrorState";
+import Head from "next/head";
 
 interface GalleryResponse {
   images: Image[];
@@ -13,12 +16,21 @@ interface GalleryResponse {
 }
 
 export default function AdminDashboard() {
-  const { data: allData } = useQuery<GalleryResponse>({
+  const {
+    data: allData,
+    isLoading: allLoading,
+    isError: allError,
+  } = useQuery<GalleryResponse>({
     queryKey: ["gallery-stats"],
     queryFn: () => api.get("/gallery?limit=1000").then((res) => res.data),
+    staleTime: 60_000,
   });
 
-  const { data: todayData } = useQuery<GalleryResponse>({
+  const {
+    data: todayData,
+    isLoading: todayLoading,
+    isError: todayError,
+  } = useQuery<GalleryResponse>({
     queryKey: ["gallery-today"],
     queryFn: () => {
       const today = new Date().toISOString().split("T")[0];
@@ -26,18 +38,29 @@ export default function AdminDashboard() {
         .get(`/gallery?date=${today}&limit=1000`)
         .then((res) => res.data);
     },
+    staleTime: 60_000,
   });
 
-  const totalPublications = allData?.totalCount || 0;
-  const newUploads = todayData?.totalCount || 0;
-
-  const { data: userCount } = useQuery({
+  const {
+    data: userCount,
+    isLoading: userLoading,
+    isError: userError,
+  } = useQuery({
     queryKey: ["user-count"],
     queryFn: async () => {
       const res = await api.get("/users/count");
       return res.data.count as number;
     },
+    staleTime: 60_000,
   });
+
+  if (allLoading || todayLoading || userLoading)
+    return <LoadingState message="Carregando estatísticas..." />;
+  if (allError || todayError || userError)
+    return <ErrorState message="Erro ao carregar estatísticas." />;
+
+  const totalPublications = allData?.totalCount || 0;
+  const newUploads = todayData?.totalCount || 0;
 
   const tagCounts: Record<string, number> = {};
   allData?.images.forEach((img) => {
@@ -51,7 +74,15 @@ export default function AdminDashboard() {
     .map(([tag]) => tag);
 
   return (
-    <div className="flex flex-col gap-8">
+    <>
+      <Head>
+        <title>Painel do Admin - Galeria de Imagens</title>
+        <meta
+          name="description"
+          content="Visualize estatísticas gerais do sistema."
+        />
+      </Head>
+      <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Painel do Admin</h1>
         <Link href="/">
@@ -97,5 +128,6 @@ export default function AdminDashboard() {
         </Card>
       </div>
     </div>
+    </>
   );
 }

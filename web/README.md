@@ -18,3 +18,10 @@ npm run dev
 ```
 
 A aplicação ficará disponível em http://localhost:3000.
+
+## Cache e Revalidação
+
+As páginas geradas estaticamente utilizam *Incremental Static Regeneration* com
+revalidação a cada 60 segundos. As requisições feitas com React Query também
+permanecem em cache por 60 segundos antes de uma nova busca. Ajuste esses
+valores conforme a necessidade do projeto.
