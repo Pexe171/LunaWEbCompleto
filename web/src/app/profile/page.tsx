@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Head from "next/head";
+import LoadingState from "@/components/LoadingState";
 import { useAuth } from "@/hooks/useAuth";
 import { api } from "@/lib/api";
 import { useForm } from "react-hook-form";
@@ -46,7 +48,7 @@ export default function ProfilePage() {
   }, [isAuthenticated, queryClient]);
 
   if (!isInitialized) {
-    return null;
+    return <LoadingState message="Carregando perfil..." />;
   }
 
   const profileForm = useForm<z.infer<typeof profileSchema>>({
@@ -105,12 +107,17 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="max-w-xl mx-auto py-8 space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Perfil</CardTitle>
-        </CardHeader>
-        <CardContent>
+    <>
+      <Head>
+        <title>Perfil - Galeria de Imagens</title>
+        <meta name="description" content="Gerencie suas informações pessoais." />
+      </Head>
+      <div className="max-w-xl mx-auto py-8 space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Perfil</CardTitle>
+          </CardHeader>
+          <CardContent>
           <p className="mb-4 text-sm text-gray-500">
             Email: {user?.email}
           </p>
@@ -201,5 +208,6 @@ export default function ProfilePage() {
         Sair
       </Button>
     </div>
+    </>
   );
 }
