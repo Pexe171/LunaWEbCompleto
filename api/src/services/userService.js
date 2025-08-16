@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const AppError = require('../utils/AppError');
 
 // Cria um novo usuário e deixa que o mongoose aplique o hash da senha
 // através do middleware `pre('save')` definido no modelo de usuário.
@@ -28,7 +29,7 @@ const updateUser = async (id, data) => {
 const changePassword = async (id, currentPassword, newPassword) => {
   const user = await User.findById(id);
   if (!user || !(await user.comparePassword(currentPassword))) {
-    throw new Error('Senha atual incorreta.');
+    throw new AppError('Senha atual incorreta.', 401);
   }
   user.password = newPassword;
   await user.save();

@@ -1,15 +1,33 @@
-const { validationResult } = require('express-validator');
+const AppError = require('../utils/AppError');
 
-const validate = (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        // Retorna uma mensagem de erro genérica para login
-        if (req.originalUrl === '/api/v1/auth/login' || req.originalUrl === '/api/v1/auth/refresh-token') {
-            return res.status(401).json({ message: 'Credenciais inválidas.' });
-        }
-        return res.status(400).json({ errors: errors.array() });
+const validate = (schema) => (req, res, next) => {
+  const options = { abortEarly: false, stripUnknown: true };
+
+  if (schema.body) {
+    const { error, value } = schema.body.validate(req.body, options);
+    if (error) {
+      return next(new AppError('Dados inválidos.', 400, error.details.map(d => d.message)));
     }
-    next();
+    req.body = value;
+  }
+
+  if (schema.params) {
+    const { error, value } = schema.params.validate(req.params, options);
+    if (error) {
+      return next(new AppError('Parâmetros inválidos.', 400, error.details.map(d => d.message)));
+    }
+    req.params = value;
+  }
+
+  if (schema.query) {
+    const { error, value } = schema.query.validate(req.query, options);
+    if (error) {
+      return next(new AppError('Parâmetros de consulta inválidos.', 400, error.details.map(d => d.message)));
+    }
+    req.query = value;
+  }
+
+  next();
 };
 
 module.exports = { validate };

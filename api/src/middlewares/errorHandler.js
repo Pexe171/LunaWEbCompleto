@@ -3,18 +3,18 @@ const config = require('../config');
 
 const errorHandler = (err, req, res, next) => {
     logger.error(err.message);
-    
-    // Erros de validação do Mongoose
-    if (err.name === 'ValidationError') {
-        const errors = Object.values(err.errors).map(el => el.message);
-        return res.status(400).json({ message: `Erros de validação: ${errors.join(', ')}` });
+    const statusCode = err.statusCode || (res.statusCode !== 200 ? res.statusCode : 500);
+    const response = {
+        codigo: statusCode,
+        mensagem: err.message || 'Erro interno do servidor',
+    };
+    if (err.details) {
+        response.detalhes = err.details;
     }
-
-    const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-    res.status(statusCode).json({
-        message: err.message,
-        stack: config.env === 'development' ? err.stack : undefined
-    });
+    if (config.env === 'development' && err.stack) {
+        response.stack = err.stack;
+    }
+    res.status(statusCode).json(response);
 };
 
 module.exports = { errorHandler };

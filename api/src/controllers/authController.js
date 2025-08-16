@@ -2,6 +2,7 @@ const userService = require('../services/userService');
 const authService = require('../services/authService');
 const { getTokens } = require('../utils/jwt');
 const { logger } = require('../config/logger');
+const AppError = require('../utils/AppError');
 
 const createUserController = async (req, res, next) => {
     try {
@@ -20,7 +21,7 @@ const loginController = async (req, res, next) => {
         res.json(result);
     } catch (err) {
         logger.error(`Erro de login: ${err.message}`);
-        res.status(401).json({ message: 'Credenciais inválidas.' });
+        next(new AppError('Credenciais inválidas.', 401));
     }
 };
 
@@ -28,13 +29,13 @@ const refreshController = async (req, res, next) => {
     try {
         const { refreshToken } = getTokens(req);
         if (!refreshToken) {
-            return res.status(401).json({ message: 'Refresh token não fornecido.' });
+            return next(new AppError('Refresh token não fornecido.', 401));
         }
         const result = await authService.refreshTokens(refreshToken);
         res.json(result);
     } catch (err) {
         logger.error(`Erro ao atualizar token: ${err.message}`);
-        res.status(401).json({ message: 'Credenciais inválidas.' });
+        next(new AppError('Credenciais inválidas.', 401));
     }
 };
 
@@ -42,7 +43,7 @@ const logoutController = async (req, res, next) => {
     try {
         const { refreshToken } = getTokens(req);
         if (!refreshToken) {
-            return res.status(401).json({ message: 'Refresh token não fornecido.' });
+            return next(new AppError('Refresh token não fornecido.', 401));
         }
         await authService.logout(req.user._id, refreshToken);
         res.status(200).json({ message: 'Logout bem-sucedido.' });
