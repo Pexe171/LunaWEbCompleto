@@ -1,45 +1,42 @@
-"use client";
-
-import GalleryGrid from "@/components/GalleryGrid";
-import LoadingState from "@/components/LoadingState";
+import type { Metadata } from "next";
 import ErrorState from "@/components/ErrorState";
-import Head from "next/head";
-import { api } from "@/lib/api";
-import { useQuery } from "@tanstack/react-query";
-import { Image } from "@/types";
+import GalleryContent, { type GalleryResponse } from "@/components/GalleryContent";
 
-interface GalleryResponse {
-  images: Image[];
-  totalCount: number;
-  totalPages: number;
-  currentPage: number;
+export const metadata: Metadata = {
+  title: "Galeria de Imagens",
+  description: "Uma galeria de imagens com autenticação.",
+};
+
+const API_BASE_URL =
+  process.env.API_URL_INTERNAL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:3333/api/v1";
+
+async function fetchGallery(): Promise<GalleryResponse | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/gallery`, {
+      next: { revalidate: 60 },
+      signal: AbortSignal.timeout(10_000),
+    });
+
+    if (!response.ok) {
+      console.error("Falha ao carregar galeria:", response.statusText);
+      return null;
+    }
+
+    return (await response.json()) as GalleryResponse;
+  } catch (error) {
+    console.error("Erro ao buscar dados da galeria", error);
+    return null;
+  }
 }
 
-export default function Home() {
-  const { data, isLoading, isError } = useQuery<GalleryResponse>({
-    queryKey: ["gallery"],
-    queryFn: () => api.get("/gallery").then((res) => res.data),
-    staleTime: 60_000,
-    gcTime: 300_000,
-    retry: false,
-  });
+export default async function Home() {
+  const data = await fetchGallery();
 
-  if (isLoading) return <LoadingState message="Carregando galeria..." />;
-  if (isError) return <ErrorState message="Erro ao carregar galeria." />;
+  if (!data) {
+    return <ErrorState message="Erro ao carregar galeria." />;
+  }
 
-  return (
-    <>
-      <Head>
-        <title>Galeria de Imagens</title>
-        <meta
-          name="description"
-          content="Uma galeria de imagens com autenticação."
-        />
-      </Head>
-      <div className="flex flex-col gap-8">
-        <h1 className="text-3xl font-bold">Galeria de Imagens</h1>
-        <GalleryGrid images={data?.images || []} />
-      </div>
-    </>
-  );
+  return <GalleryContent initialData={data} />;
 }

@@ -54,6 +54,7 @@ cp ./web/.env.local.example ./web/.env.local
 Depois:
 
 * Ajuste `NEXT_PUBLIC_API_URL` no `web/.env.local` para apontar para a API.
+* Caso execute via Docker, defina também `API_URL_INTERNAL` apontando para o host interno da API (ex.: `http://api:3333/api/v1`).
 * No `api/.env`, revise as chaves de segurança (`JWT_*`), origens de CORS e limites de rate limit (`RATE_LIMIT_*`).
 
 ### 3. Subir tudo com Docker Compose (recomendado)
