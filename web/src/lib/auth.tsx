@@ -30,7 +30,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const [accessToken, setLocalAccessToken] = useState<string | null>(null);
   const [refreshToken, setLocalRefreshToken] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isFetchingUser, setIsFetchingUser] = useState(false);
 
   useEffect(() => {
     const storedAccessToken = getAccessToken();
@@ -40,6 +42,53 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsInitialized(true);
   }, []);
 
+  useEffect(() => {
+    if (!isInitialized) {
+      return;
+    }
+
+    if (!accessToken) {
+      setUser(null);
+      queryClient.setQueryData(['auth'], { user: null });
+      return;
+    }
+
+    let isCurrent = true;
+
+    const loadUser = async () => {
+      setIsFetchingUser(true);
+      try {
+        const response = await api.get<User>('/users/me');
+        if (!isCurrent) {
+          return;
+        }
+        setUser(response.data);
+        queryClient.setQueryData(['auth'], { user: response.data });
+      } catch (error) {
+        if (!isCurrent) {
+          return;
+        }
+        console.error('Erro ao carregar dados do usuário autenticado.', error);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        setLocalAccessToken(null);
+        setLocalRefreshToken(null);
+        setUser(null);
+        queryClient.setQueryData(['auth'], { user: null });
+      } finally {
+        if (isCurrent) {
+          setIsFetchingUser(false);
+        }
+      }
+    };
+
+    loadUser();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [accessToken, isInitialized, queryClient]);
+
   const loginMutation = useMutation({
     mutationFn: (data: LoginData) => api.post('/auth/login', data),
     onSuccess: (res) => {
@@ -47,6 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setRefreshToken(res.data.refreshToken);
       setLocalAccessToken(res.data.accessToken);
       setLocalRefreshToken(res.data.refreshToken);
+      setUser(res.data.user);
       queryClient.setQueryData(['auth'], { user: res.data.user });
     },
   });
@@ -67,6 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('refreshToken');
       setLocalAccessToken(null);
       setLocalRefreshToken(null);
+      setUser(null);
       queryClient.setQueryData(['auth'], { user: null });
     },
     onError: () => {
@@ -79,16 +130,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('refreshToken');
       setLocalAccessToken(null);
       setLocalRefreshToken(null);
+      setUser(null);
       queryClient.setQueryData(['auth'], { user: null });
     },
   });
 
   const value = {
-    user: (queryClient.getQueryData(['auth']) as { user: User | null })?.user,
-    isAuthenticated: !!accessToken,
+    user,
+    isAuthenticated: Boolean(accessToken && user),
     isLoading:
       loginMutation.isPending ||
-      registerMutation.isPending,
+      registerMutation.isPending ||
+      isFetchingUser,
     isInitialized,
     login: loginMutation.mutateAsync,
     register: registerMutation.mutateAsync,
