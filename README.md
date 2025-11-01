@@ -15,17 +15,7 @@ Use as credenciais abaixo para acessar a área de upload:
 
 - `api/`: Backend em Node.js com Express, MongoDB e JWT para autenticação.
 - `web/`: Frontend em Next.js 14 com TypeScript, Tailwind CSS e shadcn/ui.
-- `java/`: Utilitários de segurança implementados em Java.
 - `docker-compose.yml`: Orquestração de todos os serviços (MongoDB, API e Web) para fácil inicialização.
-
-### Utilitários de Segurança em Java
-
-O diretório `java/` contém a classe `SecurityUtils` com funções auxiliares para geração de salt, hash e verificação de senhas, além da criação de tokens seguros. Para testar:
-
-```bash
-javac java/src/com/luna/security/SecurityUtils.java java/src/com/luna/security/SecurityUtilsDemo.java
-java -cp java/src com.luna.security.SecurityUtilsDemo
-```
 
 
 ---
@@ -127,6 +117,5 @@ O endpoint `/metrics` expõe um JSON com estatísticas por rota, incluindo:
 ├─ README.md
 ├─ docker-compose.yml
 ├─ api/
-├─ java/
 └─ web/
 ```

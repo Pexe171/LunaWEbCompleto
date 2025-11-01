@@ -20,6 +20,3 @@ Thumbs.db
 .env.local
 .env.*.local
 !web/.env.local
-
-# Java
-*.class
