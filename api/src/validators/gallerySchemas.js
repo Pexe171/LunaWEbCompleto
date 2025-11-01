@@ -11,7 +11,15 @@ const createGalleryImageSchema = {
       'any.required': 'URL é obrigatória.'
     }),
     description: Joi.string().optional(),
-    tags: Joi.string().optional()
+    tags: Joi.string().optional(),
+    signature: Joi.string().min(10).required().messages({
+      'any.required': 'Assinatura digital é obrigatória.',
+      'string.empty': 'Assinatura digital é obrigatória.',
+      'string.min': 'Assinatura digital deve ter ao menos 10 caracteres.'
+    }),
+    certificateUrl: Joi.string().uri({ allowRelative: false }).optional().messages({
+      'string.uri': 'Certificado digital deve ser uma URL válida.'
+    })
   })
 };
 
@@ -25,4 +33,18 @@ const imageIdParamSchema = {
   })
 };
 
-module.exports = { createGalleryImageSchema, imageIdParamSchema };
+const updateImageStatusSchema = {
+  body: Joi.object({
+    status: Joi.string()
+      .valid('pending', 'approved', 'rejected')
+      .required()
+      .messages({
+        'any.required': 'Status é obrigatório.',
+        'any.only': 'Status deve ser pending, approved ou rejected.'
+      }),
+    notes: Joi.string().allow('', null).optional()
+  }),
+  params: imageIdParamSchema.params
+};
+
+module.exports = { createGalleryImageSchema, imageIdParamSchema, updateImageStatusSchema };

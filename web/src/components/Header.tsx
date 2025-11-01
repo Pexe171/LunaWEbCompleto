@@ -26,6 +26,8 @@ export default function Header() {
           <Link href="/">Início</Link>
           <Link href="/galeria">Galeria</Link>
           <Link href="/sobre">Sobre</Link>
+          <Link href="/manifesto-da-arte-humana">Manifesto</Link>
+          <Link href="/politica-de-publicacao">Política de Publicação</Link>
         </nav>
 
         <div className="ml-auto flex items-center gap-4">

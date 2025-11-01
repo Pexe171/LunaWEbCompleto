@@ -8,7 +8,7 @@ const createGalleryImage = async (imageData) => {
 };
 
 const getGalleryImages = async (filters) => {
-    let { tags, search, technique, artist, date, page = 1, limit = 10 } = filters;
+    let { tags, search, technique, artist, date, status, page = 1, limit = 10 } = filters;
 
     // Ensure page and limit are valid positive integers
     page = parseInt(page, 10);
@@ -36,6 +36,14 @@ const getGalleryImages = async (filters) => {
         const end = new Date(date);
         end.setHours(23, 59, 59, 999);
         query.createdAt = { $gte: start, $lte: end };
+    }
+
+    if (status && status !== 'all') {
+        query.status = status;
+    }
+
+    if (!status) {
+        query.status = 'approved';
     }
 
     const totalCount = await Image.countDocuments(query);
@@ -88,4 +96,23 @@ const deleteGalleryImage = async (imageId) => {
     return image;
 };
 
-module.exports = { createGalleryImage, getGalleryImages, addLike, removeLike, deleteGalleryImage };
+const updateImageStatus = async (imageId, status, reviewerId, notes) => {
+    const update = {
+        status,
+    };
+
+    if (status === 'pending') {
+        update.reviewedAt = null;
+        update.reviewedBy = null;
+        update.moderationNotes = '';
+    } else {
+        update.reviewedAt = new Date();
+        update.reviewedBy = reviewerId;
+        update.moderationNotes = typeof notes !== 'undefined' ? notes : '';
+    }
+
+    const image = await Image.findByIdAndUpdate(imageId, update, { new: true });
+    return image;
+};
+
+module.exports = { createGalleryImage, getGalleryImages, addLike, removeLike, deleteGalleryImage, updateImageStatus };

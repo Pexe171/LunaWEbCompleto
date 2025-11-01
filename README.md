@@ -3,6 +3,13 @@
 
 Este é um monorepo que contém uma API Node.js/Express e um aplicativo web Next.js para uma galeria de imagens. A API gerencia a autenticação de usuários, enquanto o aplicativo web consome essa API para exibir imagens, permitir likes e gerenciar o upload de novas imagens.
 
+Principais recursos atuais:
+
+- Manifesto público reforçando o compromisso com criações humanas.
+- Política de publicação que deixa explícito que obras geradas por IA não são aceitas.
+- Fila de moderação manual com painel administrativo para aprovar ou recusar envios.
+- Campo de assinatura digital (e link opcional de certificado) obrigatório em cada envio.
+
 ## Acesso de Administrador
 
 Por padrão, um usuário administrador é criado automaticamente quando a API inicia.
@@ -16,6 +23,13 @@ Use as credenciais abaixo para acessar a área de upload:
 - `api/`: Backend em Node.js com Express, MongoDB e JWT para autenticação.
 - `web/`: Frontend em Next.js 14 com TypeScript, Tailwind CSS e shadcn/ui.
 - `docker-compose.yml`: Orquestração de todos os serviços (MongoDB, API e Web) para fácil inicialização.
+
+## Política de Publicação e Autoria
+
+- Apenas obras produzidas manualmente são publicadas. O manifesto “Arte Humana” e a página de política explicam os critérios.
+- Toda submissão exige uma assinatura digital (hash, certificado ou declaração exclusiva) para autenticar a autoria.
+- Envios chegam com status **pendente** e são avaliados pelo painel de moderação. Administradores registram notas de curadoria ao aprovar ou recusar cada obra.
+- Conteúdos reprovados podem ser reabertos para nova análise caso a equipe decida.
 
 
 ---

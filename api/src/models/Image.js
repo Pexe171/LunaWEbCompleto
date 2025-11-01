@@ -8,6 +8,18 @@ const imageSchema = new mongoose.Schema({
     artist: { type: String },
     technique: { type: String },
     tags: [{ type: String }],
+    signature: { type: String, required: true },
+    certificateUrl: { type: String },
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending',
+        index: true
+    },
+    moderationNotes: { type: String },
+    reviewedAt: { type: Date },
+    reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     createdAt: { type: Date, default: Date.now }
 });
 

@@ -34,6 +34,8 @@ export default function UploadPage() {
       url: "",
       tags: "",
       description: "",
+      signature: "",
+      certificateUrl: "",
     },
   });
 
@@ -44,17 +46,19 @@ export default function UploadPage() {
         url: data.url,
         tags: data.tags ?? '',
         description: data.description ?? '',
+        signature: data.signature,
+        certificateUrl: data.certificateUrl,
       });
     },
     onSuccess: () => {
       toast({
-        title: "Sucesso!",
-        description: "Imagem carregada com sucesso.",
+        title: "Envio recebido!",
+        description: "Sua obra entrou na fila de curadoria humana e será avaliada em breve.",
         variant: "default",
       });
       queryClient.invalidateQueries({ queryKey: ['gallery'] });
       form.reset();
-      router.push('/');
+      router.push('/admin/publications');
     },
     onError: (error: any) => {
       toast({
@@ -71,7 +75,12 @@ export default function UploadPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-3xl font-bold">Carregar Nova Imagem</h1>
+      <div className="space-y-2">
+        <h1 className="text-3xl font-bold">Carregar Nova Imagem</h1>
+        <p className="text-sm text-muted-foreground">
+          Toda submissão passa por curadoria manual. Aceitamos apenas criações humanas: obras geradas por inteligência artificial não entram na nossa galeria.
+        </p>
+      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-xl space-y-6">
           <FormField
@@ -123,6 +132,42 @@ export default function UploadPage() {
                 <FormControl>
                   <Textarea rows={5} placeholder="Conte a história desta imagem" {...field} />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="signature"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Assinatura Digital</FormLabel>
+                <FormControl>
+                  <Textarea
+                    rows={4}
+                    placeholder="Informe a assinatura digital ou hash que comprove a autoria da obra"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Use um certificado, hash ou declaração única que autentique que a arte é sua criação manual.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="certificateUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Link para Certificado (opcional)</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://exemplo.com/certificado.pdf" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Caso possua um certificado digital de autoria, compartilhe o link aqui.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

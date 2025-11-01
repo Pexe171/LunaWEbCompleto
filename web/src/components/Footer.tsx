@@ -14,6 +14,12 @@ export default function Footer() {
           <Link href="/contato" className="hover:underline">
             Contato
           </Link>
+          <Link href="/manifesto-da-arte-humana" className="hover:underline">
+            Manifesto da Arte Humana
+          </Link>
+          <Link href="/politica-de-publicacao" className="hover:underline">
+            Política de Publicação
+          </Link>
           <Link
             href="/politica-de-privacidade"
             className="hover:underline"
