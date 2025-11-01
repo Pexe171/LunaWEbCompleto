@@ -39,14 +39,4 @@ export const imageSchema = z.object({
     .url({ message: "URL da imagem inválida." }),
   tags: z.string().optional(),
   description: z.string().optional(),
-  signature: z
-    .string()
-    .min(10, { message: "A assinatura digital deve ter ao menos 10 caracteres." }),
-  certificateUrl: z
-    .union([
-      z.string().url({ message: "Informe uma URL válida." }),
-      z.literal(""),
-    ])
-    .optional()
-    .transform((value) => (value ? value : undefined)),
 });

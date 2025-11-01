@@ -96,21 +96,6 @@ function ModerationCard({
           )}
         </div>
 
-        <div className="space-y-2 text-sm">
-          <p className="font-medium">Assinatura digital</p>
-          <p className="rounded border bg-muted/40 p-2 font-mono text-xs break-all">{image.signature}</p>
-          {image.certificateUrl && (
-            <a
-              href={image.certificateUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex text-xs font-semibold text-primary underline"
-            >
-              Abrir certificado digital
-            </a>
-          )}
-        </div>
-
         {image.moderationNotes && image.status === "rejected" && (
           <div className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
             Motivo da recusa: {image.moderationNotes}
