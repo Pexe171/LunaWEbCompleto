@@ -30,7 +30,6 @@ const createGalleryController = async (req, res, next) => {
         const data = {
             title: req.body.title,
             url: req.body.url,
-            signature: req.body.signature,
             submittedBy: req.user?._id,
         };
         if (req.body.description) {
@@ -39,10 +38,6 @@ const createGalleryController = async (req, res, next) => {
         if (tags.length > 0) {
             data.tags = tags;
         }
-        if (req.body.certificateUrl) {
-            data.certificateUrl = req.body.certificateUrl;
-        }
-
         const newImage = await galleryService.createGalleryImage(data);
         res.status(201).json(newImage);
     } catch (err) {

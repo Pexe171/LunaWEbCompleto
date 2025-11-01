@@ -8,8 +8,6 @@ const imageSchema = new mongoose.Schema({
     artist: { type: String },
     technique: { type: String },
     tags: [{ type: String }],
-    signature: { type: String, required: true },
-    certificateUrl: { type: String },
     status: {
         type: String,
         enum: ['pending', 'approved', 'rejected'],
