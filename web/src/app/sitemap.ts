@@ -10,5 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/sobre`, lastModified: new Date() },
     { url: `${base}/contato`, lastModified: new Date() },
     { url: `${base}/politica-de-privacidade`, lastModified: new Date() },
+    { url: `${base}/politica-de-publicacao`, lastModified: new Date() },
+    { url: `${base}/manifesto-da-arte-humana`, lastModified: new Date() },
   ];
 }

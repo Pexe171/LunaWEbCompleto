@@ -17,13 +17,23 @@ interface GalleryResponse {
 
 export default function AdminDashboard() {
   const {
-    data: allData,
-    isLoading: allLoading,
-    isError: allError,
+    data: approvedData,
+    isLoading: approvedLoading,
+    isError: approvedError,
   } = useQuery<GalleryResponse>({
-    queryKey: ["gallery-stats"],
-    queryFn: () => api.get("/gallery?limit=1000").then((res) => res.data),
+    queryKey: ["gallery-approved"],
+    queryFn: () => api.get("/gallery?status=approved&limit=1000").then((res) => res.data),
     staleTime: 60_000,
+  });
+
+  const {
+    data: pendingData,
+    isLoading: pendingLoading,
+    isError: pendingError,
+  } = useQuery<GalleryResponse>({
+    queryKey: ["gallery-pending"],
+    queryFn: () => api.get("/gallery?status=pending&limit=1000").then((res) => res.data),
+    staleTime: 30_000,
   });
 
   const {
@@ -34,8 +44,9 @@ export default function AdminDashboard() {
     queryKey: ["gallery-today"],
     queryFn: () => {
       const today = new Date().toISOString().split("T")[0];
+      const params = new URLSearchParams({ date: today, limit: "1000", status: "all" });
       return api
-        .get(`/gallery?date=${today}&limit=1000`)
+        .get(`/gallery?${params.toString()}`)
         .then((res) => res.data);
     },
     staleTime: 60_000,
@@ -54,16 +65,17 @@ export default function AdminDashboard() {
     staleTime: 60_000,
   });
 
-  if (allLoading || todayLoading || userLoading)
+  if (approvedLoading || pendingLoading || todayLoading || userLoading)
     return <LoadingState message="Carregando estatísticas..." />;
-  if (allError || todayError || userError)
+  if (approvedError || pendingError || todayError || userError)
     return <ErrorState message="Erro ao carregar estatísticas." />;
 
-  const totalPublications = allData?.totalCount || 0;
+  const totalPublications = approvedData?.totalCount || 0;
+  const pendingReviews = pendingData?.totalCount || 0;
   const newUploads = todayData?.totalCount || 0;
 
   const tagCounts: Record<string, number> = {};
-  allData?.images.forEach((img) => {
+  approvedData?.images.forEach((img) => {
     (img.tags || []).forEach((tag) => {
       tagCounts[tag] = (tagCounts[tag] || 0) + 1;
     });
@@ -92,18 +104,29 @@ export default function AdminDashboard() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle>Total de Publicações</CardTitle>
+            <CardTitle>Obras publicadas</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalPublications}</div>
+            <p className="text-xs text-muted-foreground">Aprovadas e visíveis na galeria pública.</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle>Novos Envios (24h)</CardTitle>
+            <CardTitle>Novos envios (24h)</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{newUploads}</div>
+            <p className="text-xs text-muted-foreground">Inclui obras em análise humana.</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle>Pendentes de revisão</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{pendingReviews}</div>
+            <p className="text-xs text-muted-foreground">Envios aguardando confirmação de autoria.</p>
           </CardContent>
         </Card>
         <Card>
@@ -112,21 +135,24 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{userCount ?? 0}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle>Tags Mais Usadas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-1 text-sm">
-              {topTags.map((tag) => (
-                <li key={tag}>#{tag}</li>
-              ))}
-            </ul>
+            <p className="text-xs text-muted-foreground">Contas ativas na comunidade.</p>
           </CardContent>
         </Card>
       </div>
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle>Tags mais usadas</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-1 text-sm">
+            {topTags.length > 0 ? (
+              topTags.map((tag) => <li key={tag}>#{tag}</li>)
+            ) : (
+              <li className="text-muted-foreground">Aguardando primeiras publicações.</li>
+            )}
+          </ul>
+        </CardContent>
+      </Card>
     </div>
     </>
   );

@@ -51,6 +51,22 @@ export default function Lightbox({ isOpen, onClose, image }: LightboxProps) {
             {image.artist && `${image.artist} • `}
             {new Date(image.createdAt).toLocaleDateString()}
           </p>
+          <div className="mt-3 space-y-2 text-sm">
+            <p className="font-medium">Assinatura verificada</p>
+            <p className="rounded border bg-muted/40 p-2 font-mono text-xs break-all">
+              {image.signature}
+            </p>
+            {image.certificateUrl && (
+              <a
+                href={image.certificateUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex text-xs font-semibold text-primary underline"
+              >
+                Ver certificado digital
+              </a>
+            )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>

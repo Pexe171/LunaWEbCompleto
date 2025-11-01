@@ -35,6 +35,13 @@ export interface Image {
   height?: number;
   tags?: string[];
   likes?: number;
+  signature: string;
+  certificateUrl?: string;
+  status: 'pending' | 'approved' | 'rejected';
+  moderationNotes?: string;
+  reviewedAt?: string | null;
+  reviewedBy?: string | null;
+  submittedBy?: string | null;
   createdAt: string;
 }
 

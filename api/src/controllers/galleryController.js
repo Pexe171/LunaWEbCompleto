@@ -3,13 +3,14 @@ const AppError = require('../utils/AppError');
 
 const getGalleryController = async (req, res, next) => {
     try {
-        const { tags, search, page, limit, technique, artist, date } = req.query;
+        const { tags, search, page, limit, technique, artist, date, status } = req.query;
         const filters = {
             tags: tags ? tags.split(',') : undefined,
             search,
             technique,
             artist,
             date,
+            status,
             page: parseInt(page, 10),
             limit: parseInt(limit, 10)
         };
@@ -29,6 +30,8 @@ const createGalleryController = async (req, res, next) => {
         const data = {
             title: req.body.title,
             url: req.body.url,
+            signature: req.body.signature,
+            submittedBy: req.user?._id,
         };
         if (req.body.description) {
             data.description = req.body.description;
@@ -36,9 +39,28 @@ const createGalleryController = async (req, res, next) => {
         if (tags.length > 0) {
             data.tags = tags;
         }
+        if (req.body.certificateUrl) {
+            data.certificateUrl = req.body.certificateUrl;
+        }
 
         const newImage = await galleryService.createGalleryImage(data);
         res.status(201).json(newImage);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const updateGalleryStatusController = async (req, res, next) => {
+    try {
+        const { imageId } = req.params;
+        const { status, notes } = req.body;
+        const reviewerId = req.user?._id;
+        const updatedImage = await galleryService.updateImageStatus(imageId, status, reviewerId, notes);
+        if (!updatedImage) {
+            return next(new AppError('Imagem não encontrada.', 404));
+        }
+
+        res.status(200).json(updatedImage);
     } catch (err) {
         next(err);
     }
@@ -79,4 +101,11 @@ const deleteGalleryController = async (req, res, next) => {
         next(err);
     }
 };
-module.exports = { getGalleryController, createGalleryController, addLikeController, removeLikeController, deleteGalleryController };
+module.exports = {
+    getGalleryController,
+    createGalleryController,
+    addLikeController,
+    removeLikeController,
+    deleteGalleryController,
+    updateGalleryStatusController
+};
