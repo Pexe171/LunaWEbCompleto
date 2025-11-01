@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "@/styles/gallery.css";
@@ -24,6 +25,19 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={inter.className}>
+        <Script id="remove-hydration-attrs" strategy="beforeInteractive">
+          {`
+            if (typeof document !== "undefined") {
+              const rootElement = document.documentElement;
+              if (rootElement.hasAttribute("suppresshydrationwarning")) {
+                rootElement.removeAttribute("suppresshydrationwarning");
+              }
+              if (rootElement.hasAttribute("data-lt-installed")) {
+                rootElement.removeAttribute("data-lt-installed");
+              }
+            }
+          `}
+        </Script>
         <Providers>
           <ApiStatusLogger />
           <AppShell>{children}</AppShell>
