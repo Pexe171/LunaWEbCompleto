@@ -34,50 +34,91 @@ Use as credenciais abaixo para acessar a área de upload:
 
 ---
 
-## Como Rodar
+## Guia Rápido
 
-Existem duas formas de rodar o projeto:
+Use este passo a passo como checklist sempre que precisar ligar o projeto do zero.
 
-1.  **Com Docker Compose (Recomendado)**
-2.  **Localmente (Manual)**
+### 1. Pré-requisitos
 
-### 1. Com Docker Compose
+* Docker e Docker Compose instalados **ou** Node.js 18+ com npm.
+* MongoDB local (somente para execução manual).
+* Arquivos `.env` preenchidos (veja abaixo).
 
-Certifique-se de ter o Docker e o Docker Compose instalados.
+### 2. Configurar variáveis de ambiente
 
-1.  **Configurar Variáveis de Ambiente:**
-    * Navegue até `api/` e `web/`.
-    * Copie os arquivos `.env.example` para `.env` e `.env.local` respectivamente.
-    * `cp ./api/.env.example ./api/.env`
-    * `cp ./web/.env.local.example ./web/.env.local`
-    * No arquivo `web/.env.local`, defina a URL da API:
-      `NEXT_PUBLIC_API_URL=http://localhost:3333/api/v1`
-    * Configure também as novas variáveis de segurança no arquivo `api/.env`:
-      - `CORS_ORIGINS` com a lista de origens permitidas (dev/homolog/prod);
-      - `PAYLOAD_LIMIT` para limitar o tamanho do corpo das requisições JSON;
-      - `RATE_LIMIT_WINDOW_MS` e `RATE_LIMIT_MAX` para controlar o número de requisições por IP;
-      - `RATE_LIMIT_AUTH_WINDOW_MS` e `RATE_LIMIT_AUTH_MAX` para limitar tentativas de login e registro;
-      - `RATE_LIMIT_UPLOAD_WINDOW_MS` e `RATE_LIMIT_UPLOAD_MAX` para controlar uploads de imagens.
-    * Você pode personalizar os segredos JWT conforme necessário.
+```bash
+cp ./api/.env.example ./api/.env
+cp ./web/.env.local.example ./web/.env.local
+```
 
-2.  **Iniciar os Serviços:**
-    * Na raiz do projeto, execute o comando:
-        ```bash
-        docker-compose up --build
-        ```
-    * Isso construirá as imagens, iniciará o MongoDB, a API e o aplicativo web.
+Depois:
 
-3.  **Acessar os Aplicativos:**
-    * **API (Docs):** http://localhost:3333/docs
+* Ajuste `NEXT_PUBLIC_API_URL` no `web/.env.local` para apontar para a API.
+* No `api/.env`, revise as chaves de segurança (`JWT_*`), origens de CORS e limites de rate limit (`RATE_LIMIT_*`).
+
+### 3. Subir tudo com Docker Compose (recomendado)
+
+1. Na raiz do monorepo rode uma primeira vez com build completo:
+
+    ```bash
+    docker compose up --build
+    ```
+
+2. Nas próximas vezes basta iniciar sem rebuild:
+
+    ```bash
+    docker compose up
+    ```
+
+3. Quando precisar rodar em segundo plano utilize:
+
+    ```bash
+    docker compose up -d
+    ```
+
+4. Para desligar os serviços:
+
+    ```bash
+    docker compose down
+    ```
+
+5. Endpoints úteis após o start:
+    * **API (Swagger):** http://localhost:3333/docs
+    * **Healthcheck:** `curl http://localhost:3333/healthz`
+    * **Readiness:** `curl http://localhost:3333/readyz`
+    * **Métricas:** `curl http://localhost:3333/metrics`
     * **Galeria Web:** http://localhost:3000
 
-4.  **Verificações de Segurança:**
-    * Healthcheck do processo: `curl http://localhost:3333/healthz`
-    * Prontidão de dependências: `curl http://localhost:3333/readyz`
-    * Métricas básicas: `curl http://localhost:3333/metrics`
-    * Cabeçalhos e CORS: `curl -I -H "Origin: http://localhost:3000" http://localhost:3333/healthz`
+### 4. Executar manualmente (sem Docker)
 
-Para parar os serviços, pressione `Ctrl + C` no terminal e depois execute: `docker-compose down`.
+1. **Backend (`api/`)**
+    ```bash
+    cd api
+    npm install
+    npm run dev
+    ```
+
+2. **Frontend (`web/`)**
+    ```bash
+    cd web
+    npm install
+    npm run dev
+    ```
+
+3. A API ficará em http://localhost:3333 e o frontend em http://localhost:3000.
+
+---
+
+## Scripts de Build e Produção
+
+Use os scripts abaixo quando precisar gerar builds otimizadas ou publicar uma nova versão.
+
+| Diretório | Build de produção | Start após build | Testes |
+| --- | --- | --- | --- |
+| `api/` | `npm run build` | `npm run start` | `npm test` |
+| `web/` | `npm run build` | `npm run start` | `npm test` |
+
+> Após alterar dependências, rode novamente `docker compose up --build` para gerar imagens atualizadas.
 
 ### Limites de Requisições
 
@@ -97,30 +138,40 @@ O endpoint `/metrics` expõe um JSON com estatísticas por rota, incluindo:
 * latência p50 e p95 em milissegundos;
 * contagem de erros 4xx e 5xx.
 
-### 2. Localmente (Manual)
+---
 
-#### Pré-requisitos
+## Atualização de Dependências
 
-* Node.js v18+
-* npm
-* MongoDB localmente em execução (porta 27017)
+Sempre que precisar atualizar bibliotecas ou componentes compartilhados:
 
-#### Passos
+1. **Verifique versões desatualizadas**
 
-1.  **Backend (`api/`)**
-    * Navegue até a pasta `api/`.
-    * Copie `.env.example` para `.env`: `cp .env.example .env`.
-    * Instale as dependências: `npm install`.
-    * Inicie o servidor em modo de desenvolvimento: `npm run dev`.
-    * Acesse a documentação da API em: http://localhost:3333/docs
+    ```bash
+    cd api && npm outdated
+    cd ../web && npm outdated
+    ```
 
-2.  **Frontend (`web/`)**
-    * Navegue até a pasta `web/`.
-    * Copie `.env.local.example` para `.env.local`: `cp .env.local.example .env.local`.
-    * Edite `.env.local` e configure `NEXT_PUBLIC_API_URL=http://localhost:3333/api/v1`.
-    * Instale as dependências: `npm install`.
-    * Inicie o servidor de desenvolvimento: `npm run dev`.
-    * Acesse a galeria de imagens em: http://localhost:3000
+2. **Atualize o que for necessário**
+
+    ```bash
+    npm update            # dentro de cada pasta
+    npm install pacote@^x # quando quiser subir manualmente a versão
+    ```
+
+3. **Recrie builds e imagens**
+
+    ```bash
+    npm run build         # em api/ e web/
+    docker compose up --build
+    ```
+
+4. **Rode os testes de regressão**
+
+    ```bash
+    npm test              # em api/ e web/
+    ```
+
+Documente mudanças importantes no `CHANGELOG.md` (se aplicável) e comunique a equipe antes de promover para produção.
 
 ---
 
